@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="180dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    
+    <ImageView
+        android:id="@+id/ivRoomImage"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_launcher_background"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/btnLike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_liked"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"/>
+
+
+        <com.iarcuschin.simpleratingbar.SimpleRatingBar
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srb_starSize="30dp"
+            app:srb_numberOfStars="5"
+            app:srb_rating="3"
+            app:srb_stepSize="0.5"
+            app:srb_fillColor="@color/colorPrimary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivRoomImage"/>
+
+    <TextView
+        android:id="@+id/tvRoomPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        tools:text="3.000.0000 VND / phong"
+        app:layout_constraintTop_toBottomOf="@id/rating"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/colorPrimary"/>
+
+    <TextView
+        android:id="@+id/tvAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        tools:text="17 244 phuong Tang Nhon Phu A, Quan 9"
+        app:layout_constraintTop_toBottomOf="@id/tvRoomPrice"/>
+
+</android.support.constraint.ConstraintLayout>

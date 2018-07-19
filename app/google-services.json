@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "302958859315",
+    "firebase_url": "https://intershipproject-5d58f.firebaseio.com",
+    "project_id": "intershipproject-5d58f",
+    "storage_bucket": "intershipproject-5d58f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:302958859315:android:284e2b39e4f824db",
+        "android_client_info": {
+          "package_name": "com.example.huuduc.intership_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "302958859315-uohoauge0p2auuk3khed063o7ip4r28e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.huuduc.intership_project",
+            "certificate_hash": "09c6940c16623dcdf3f498fcce10b78e0a9d7563"
+          }
+        },
+        {
+          "client_id": "302958859315-se6volbu7prukfha6ouu1cj2qp3hsv3j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuPE8IKzfCPnSuxIga1H0HRjpJL1FWMhM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "302958859315-se6volbu7prukfha6ouu1cj2qp3hsv3j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
