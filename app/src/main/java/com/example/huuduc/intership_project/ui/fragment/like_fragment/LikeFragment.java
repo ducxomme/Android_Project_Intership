@@ -1,4 +1,4 @@
-package com.example.huuduc.intership_project.ui.fragment;
+package com.example.huuduc.intership_project.ui.fragment.like_fragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

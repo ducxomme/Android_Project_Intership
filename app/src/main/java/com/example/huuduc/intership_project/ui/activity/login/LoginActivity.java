@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.huuduc.intership_project.MainActivity;
+import com.example.huuduc.intership_project.ui.activity.main.MainActivity;
 import com.example.huuduc.intership_project.R;
 import com.example.huuduc.intership_project.ui.base.BaseActivity;
 import com.example.huuduc.intership_project.utils.DatabaseService;
