@@ -50,22 +50,26 @@ public class BaseActivity extends AppCompatActivity implements BaseView {
     }
     @Override
     public void showMessage(String title, int message, int messageType) {
-        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this, messageType);
-        sweetAlertDialog.setTitleText(title);
-        sweetAlertDialog.setContentText(getString(message));
-        sweetAlertDialog.setConfirmText("OK");
-        sweetAlertDialog.setCanceledOnTouchOutside(true);
-        sweetAlertDialog.show();
+        if (!isFinishing()) {
+            SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this, messageType);
+            sweetAlertDialog.setTitleText(title);
+            sweetAlertDialog.setContentText(getString(message));
+            sweetAlertDialog.setConfirmText("OK");
+            sweetAlertDialog.setCanceledOnTouchOutside(true);
+            sweetAlertDialog.show();
+        }
     }
 
     @Override
     public void showMessage(String title, String message, int messageType) {
-        SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this, messageType);
-        sweetAlertDialog.setTitleText(title);
-        sweetAlertDialog.setContentText(message);
-        sweetAlertDialog.setConfirmText("OK");
-        sweetAlertDialog.setCanceledOnTouchOutside(true);
-        sweetAlertDialog.show();
+        if (!isFinishing()) {
+            SweetAlertDialog sweetAlertDialog = new SweetAlertDialog(this, messageType);
+            sweetAlertDialog.setTitleText(title);
+            sweetAlertDialog.setContentText(message);
+            sweetAlertDialog.setConfirmText("OK");
+            sweetAlertDialog.setCanceledOnTouchOutside(true);
+            sweetAlertDialog.show();
+        }
     }
     @Override
     public void hideLoading(String message, boolean isSuccess) {

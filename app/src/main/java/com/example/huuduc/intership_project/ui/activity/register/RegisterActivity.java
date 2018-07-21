@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class RegisterActivity extends BaseActivity implements IRegisterView {
 
@@ -84,7 +85,7 @@ public class RegisterActivity extends BaseActivity implements IRegisterView {
         if (isConnected()){
             mRegisterPresenter.handleRegister(email, username, password);
         }else{
-            showMessage("Sign Up Failed");
+            showMessage("Message", "Sign Up Failed", SweetAlertDialog.ERROR_TYPE);
         }
     }
 
@@ -205,7 +206,7 @@ public class RegisterActivity extends BaseActivity implements IRegisterView {
 
     @Override
     public void registerSuccess() {
-        showMessage("Sign Up Successful");
+        showMessage("Message", "Sign Up Successful", SweetAlertDialog.SUCCESS_TYPE);
         startActivity(new Intent(this, LoginActivity.class));
     }
 }

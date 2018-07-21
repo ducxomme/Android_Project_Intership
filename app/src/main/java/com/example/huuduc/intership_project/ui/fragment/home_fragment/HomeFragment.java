@@ -1,5 +1,6 @@
 package com.example.huuduc.intership_project.ui.fragment.home_fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.example.huuduc.intership_project.ui.activity.main.MainActivity;
 import com.example.huuduc.intership_project.R;
@@ -25,10 +25,8 @@ import java.util.List;
 public class HomeFragment extends BaseFragment implements IHomeFragmentView{
     private CategoryAdapter adapter;
     private List<RoomCategory> listCategory;
-    private ProgressBar progressBar;
     private RecyclerView rvCategory;
 
-//    Map<Room, Double> listRoomRating;
 
     public HomeFragment() {
     }
@@ -52,7 +50,6 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView{
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        progressBar = view.findViewById(R.id.progressBar);
         rvCategory = view.findViewById(R.id.rvCategory);
         rvCategory.setHasFixedSize(true);
         listCategory = new ArrayList<>();
@@ -62,8 +59,6 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView{
 
         rvCategory.setLayoutManager(new LinearLayoutManager(getContext()));
         rvCategory.setAdapter(adapter);
-
-        progressBar.setVisibility(View.VISIBLE);
 
         RoomHelper.getAllBestSeenRoom(new RoomListListener() {
             @Override
@@ -106,6 +101,5 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView{
             public void OnSuccess_RoomLike(List<String> listRoomLike) {
             }
         });
-        progressBar.setVisibility(View.INVISIBLE);
     }
 }

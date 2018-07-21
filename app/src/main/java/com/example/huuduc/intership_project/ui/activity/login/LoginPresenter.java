@@ -24,7 +24,6 @@ public class LoginPresenter extends BasePresenter implements ILoginPresenter{
 
     @Override
     public void onClickLogin(String email, String password) {
-        iLoginView.showDialog();
         mDatabase.getFirebaseAuth().signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {

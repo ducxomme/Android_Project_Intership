@@ -27,7 +27,7 @@ public class RegisterPresenter extends BasePresenter implements IRegisterPresent
 
     public void handleRegister(final String email, final String username, final String password) {
 
-        iRegisterView.showDialog();
+        iRegisterView.showLoading("Loading...");
         mDatabase.getFirebaseAuth().createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {

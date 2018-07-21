@@ -10,16 +10,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-
-import com.example.huuduc.intership_project.R;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import butterknife.ButterKnife;
-import butterknife.internal.Utils;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public abstract class BaseFragment<T extends BaseActivity> extends Fragment implements BaseView {
 
@@ -95,7 +88,7 @@ public abstract class BaseFragment<T extends BaseActivity> extends Fragment impl
     }
 
     public void finishLoading(String message, boolean isSuccess) {
-        mActivity.hideLoading(message,isSuccess);
+        mActivity.hideLoading(message, isSuccess);
     }
 
     public void hideLoading() {
@@ -119,7 +112,7 @@ public abstract class BaseFragment<T extends BaseActivity> extends Fragment impl
 
     @Override
     public void showMessage(String title, String message, int messageType) {
-        mActivity.showMessage(title,message, messageType);
+        mActivity.showMessage(title, message, messageType);
     }
 
     @Override
