@@ -1,21 +1,18 @@
 package com.example.huuduc.intership_project;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.huuduc.intership_project.data.helper.RatingHelper;
-import com.example.huuduc.intership_project.data.listener.RoomListListener;
 import com.example.huuduc.intership_project.ui.fragment.HomeFragment;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String SELECTED_ITEM = "arg_selected_item";
     private BottomNavigationView navigation;
     private int mSelectedItem;
 
@@ -23,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        addControls(savedInstanceState);
+        addEvents();
 
 //        RoomHelper.getAllRoom(new RoomListListener() {
 //            @Override
@@ -57,22 +56,78 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
 //
-        RatingHelper.getRating("XjeTdoRw0XYHIgDfFVKVyabyOcw2", new RoomListListener() {
+//        RatingHelper.getRating("XjeTdoRw0XYHIgDfFVKVyabyOcw2", new RoomListListener() {
+//            @Override
+//            public void OnSuccess(List<?> listRoom) {
+//
+//            }
+//
+//            @Override
+//            public void OnFailed(String error) {
+//
+//            }
+//
+//            @Override
+//            public void OnSuccess_Rating(double rating) {
+//                Log.d("Rating", String.valueOf(rating));
+//            }
+//        });
+
+//        RoomHelper.getAllBestSeenRoom(new RoomListListener() {
+//            @Override
+//            public void OnSuccess(List<Room> listRoom) {
+//                for (int i = 0; i < listRoom.size(); i++){
+//                    Log.e("ROOM_ID", listRoom.get(i).toString());
+//                }
+//            }
+//
+//            @Override
+//            public void OnFailed(String error) {}
+//
+//            @Override
+//            public void OnSuccess_RoomLike(List<String> listRoomLike) {}
+//        });
+
+//        RoomHelper.getBestRatingRoom(new RoomListListener() {
+//            @Override
+//            public void OnSuccess(List<Room> listRoom) {
+//                for (int i = 0; i < listRoom.size(); i++){
+//                    Log.e("ROOM_ID", listRoom.get(i).toString());
+//                }
+//            }
+//            @Override
+//            public void OnFailed(String error) {
+//            }
+//            @Override
+//            public void OnSuccess_RoomLike(List<String> listRoomLike) {
+//            }
+//        });
+    }
+
+    private void addEvents() {
+
+        navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void OnSuccess(List<?> listRoom) {
-
-            }
-
-            @Override
-            public void OnFailed(String error) {
-
-            }
-
-            @Override
-            public void OnSuccess_Rating(double rating) {
-                Log.d("Rating", String.valueOf(rating));
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                selectedFragment(item);
+                return true;
             }
         });
+    }
+    private void addControls(Bundle savedInstanceState) {
+        navigation = findViewById(R.id.navigation);
+        // attaching bottom sheet behaviour - hide / show on scroll
+//        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) navigation.getLayoutParams();
+//        layoutParams.setBehavior(new BottomNavigationViewBehavior());
+
+        MenuItem selectedItem;
+        if (savedInstanceState != null) {
+            mSelectedItem = savedInstanceState.getInt(SELECTED_ITEM, 0);
+            selectedItem = navigation.getMenu().findItem(mSelectedItem);
+        } else {
+            selectedItem = navigation.getMenu().getItem(0);
+        }
+        selectedFragment(selectedItem);
     }
 
     private void selectedFragment(MenuItem item) {

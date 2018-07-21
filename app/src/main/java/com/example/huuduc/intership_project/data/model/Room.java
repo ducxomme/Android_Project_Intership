@@ -12,11 +12,12 @@ public class Room {
     public String address;
     public int seen;
     public int room_empty;
+    public String rating;
 
     public Room() {
     }
 
-    public Room(String id, String user_id, String ward, String district, int area, int price, String date_public, String image, String address, int seen, int room_empty) {
+    public Room(String id, String user_id, String ward, String district, int area, int price, String date_public, String image, String address, int seen, int room_empty, String rating) {
         this.id = id;
         this.user_id = user_id;
         this.ward = ward;
@@ -28,6 +29,7 @@ public class Room {
         this.address = address;
         this.seen = seen;
         this.room_empty = room_empty;
+        this.rating = rating;
     }
 
     public String getId() {
@@ -116,5 +118,13 @@ public class Room {
 
     public void setRoom_empty(int room_empty) {
         this.room_empty = room_empty;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
     }
 }

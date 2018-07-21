@@ -17,9 +17,10 @@ import com.example.huuduc.intership_project.data.listener.RoomListListener;
 import com.example.huuduc.intership_project.data.model.Room;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
-public class ListRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class ListRoomAdapter extends RecyclerView.Adapter<ListRoomAdapter.ListRoomHolder>{
 
     private Context context;
     private List<Room> listRoom;
@@ -36,20 +37,21 @@ public class ListRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ListRoomHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.room_item, parent, false);
         return new ListRoomHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ListRoomHolder holder, int position) {
+        holder.bindView(listRoom.get(position));
 
     }
 
     @Override
     public int getItemCount() {
-        return listRoom.size() != 0 ? 0 : listRoom.size();
+        return listRoom.size() != 0 ? listRoom.size() : 0;
     }
 
     class ListRoomHolder extends RecyclerView.ViewHolder{
@@ -65,32 +67,52 @@ public class ListRoomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ivRoomImage = itemView.findViewById(R.id.ivRoomImage);
             btnLike = itemView.findViewById(R.id.btnLike);
             ratingBar = itemView.findViewById(R.id.rating);
+            ratingBar.setIndicator(false);
             tvRoomPrice = itemView.findViewById(R.id.tvRoomPrice);
             tvAddress = itemView.findViewById(R.id.tvAddress);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onClick(getAdapterPosition());
+                }
+            });
+            btnLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onLikeClick(getAdapterPosition());
+                }
+            });
         }
 
         public void bindView(final Room room){
             Glide.with(context).load(room.getImage()).into(ivRoomImage);
             UserHelper.getAllRoomLiked(new RoomListListener() {
                 @Override
-                public void OnSuccess(List<?> listRoom) {
-                    if (listRoom.contains(room.getId())){
-                        btnLike.setImageResource(R.drawable.ic_liked);
-                    }else{
-                        btnLike.setImageResource(R.drawable.ic_like);
-                    }
-                }
+                public void OnSuccess(List<Room> listRoom) {
 
+                }
                 @Override
                 public void OnFailed(String error) {
                     btnLike.setImageResource(R.drawable.ic_like);
                 }
 
                 @Override
-                public void OnSuccess_Rating(double rating) {
-
+                public void OnSuccess_RoomLike(List<String> listRoomLike) {
+                    if (listRoomLike.contains(room.getId())){
+                        btnLike.setImageResource(R.drawable.ic_liked);
+                    }else{
+                        btnLike.setImageResource(R.drawable.ic_like);
+                    }
                 }
             });
+
+            ratingBar.setRating(Float.valueOf(room.getRating()));
+            ratingBar.setIndicator(true);
+            DecimalFormat formatter = new DecimalFormat("###,###,###");
+            tvRoomPrice.setText(formatter.format(room.getPrice())+" VNĐ");
+            tvAddress.setText(room.getAddress()+", "+room.getWard()+", "+room.getDistrict());
+
 
         }
     }

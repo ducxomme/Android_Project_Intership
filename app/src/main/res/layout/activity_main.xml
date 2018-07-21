@@ -45,7 +45,6 @@
         android:layout_weight="1">
 
     </FrameLayout>
-
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"
@@ -54,6 +53,5 @@
         android:background="#CDCDCD"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu" />
-
 
 </LinearLayout>

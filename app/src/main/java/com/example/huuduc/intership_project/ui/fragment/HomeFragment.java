@@ -12,6 +12,9 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.example.huuduc.intership_project.R;
+import com.example.huuduc.intership_project.data.helper.RoomHelper;
+import com.example.huuduc.intership_project.data.listener.RoomListListener;
+import com.example.huuduc.intership_project.data.model.Room;
 import com.example.huuduc.intership_project.data.model.RoomCategory;
 import com.example.huuduc.intership_project.ui.adapter.CategoryAdapter;
 
@@ -24,7 +27,9 @@ public class HomeFragment extends Fragment {
     private ProgressBar progressBar;
     private RecyclerView rvCategory;
 
-    public  HomeFragment() {
+//    Map<Room, Double> listRoomRating;
+
+    public HomeFragment() {
     }
 
     public static HomeFragment newInstance() {
@@ -46,13 +51,59 @@ public class HomeFragment extends Fragment {
         rvCategory = view.findViewById(R.id.rvCategory);
         rvCategory.setHasFixedSize(true);
         listCategory = new ArrayList<>();
+
+
         adapter = new CategoryAdapter(getContext(), listCategory);
 
         rvCategory.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvCategory.setNestedScrollingEnabled(false);
         rvCategory.setAdapter(adapter);
 
+        progressBar.setVisibility(View.VISIBLE);
+
+        RoomHelper.getAllBestSeenRoom(new RoomListListener() {
+            @Override
+            public void OnSuccess(List<Room> listRoom) {
+
+                RoomCategory roomCategory1 = new RoomCategory();
+                roomCategory1.setCategoryName("Phòng xem nhiều");
+
+                roomCategory1.setListRoom(listRoom);
+                listCategory.add(roomCategory1);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void OnFailed(String error) {
+            }
+
+            @Override
+            public void OnSuccess_RoomLike(List<String> listRoomLike) {
+            }
+        });
+
+
+        RoomHelper.getBestRatingRoom(new RoomListListener() {
+            @Override
+            public void OnSuccess(List<Room> listRoom) {
+                RoomCategory roomCategory2 = new RoomCategory();
+                roomCategory2.setCategoryName("Phòng nổi bật");
+                roomCategory2.setListRoom(listRoom);
+                listCategory.add(roomCategory2);
+
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void OnFailed(String error) {
+            }
+
+            @Override
+            public void OnSuccess_RoomLike(List<String> listRoomLike) {
+            }
+        });
+        progressBar.setVisibility(View.INVISIBLE);
         return view;
 
     }
+
 }

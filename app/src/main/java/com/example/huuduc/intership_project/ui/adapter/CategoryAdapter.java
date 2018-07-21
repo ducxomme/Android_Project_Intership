@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.huuduc.intership_project.R;
+import com.example.huuduc.intership_project.data.helper.UserHelper;
 import com.example.huuduc.intership_project.data.listener.OnItemClickListener;
 import com.example.huuduc.intership_project.data.model.Room;
 import com.example.huuduc.intership_project.data.model.RoomCategory;
@@ -37,12 +39,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public void onBindViewHolder(@NonNull CategoryHolder holder, int position) {
-
+        RoomCategory roomCategory = listCategory.get(position);
+        holder.bindView(roomCategory);
     }
 
     @Override
     public int getItemCount() {
-        return 2;
+        return listCategory.size();
     }
 
     class CategoryHolder extends RecyclerView.ViewHolder {
@@ -57,20 +60,30 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             rvListRoom = itemView.findViewById(R.id.rvListRoom);
         }
 
-        public void bindView(final RoomCategory roomCategory){
+        public void bindView(final RoomCategory roomCategory) {
             txtCategoryName.setText(roomCategory.getCategoryName());
-            ListRoomAdapter listRoomAdapter = new ListRoomAdapter(context, roomCategory.getListRoom());
+            listRoomAdapter = new ListRoomAdapter(context, roomCategory.getListRoom());
             LinearLayoutManager layoutManager = new LinearLayoutManager(
                     context,
                     LinearLayoutManager.HORIZONTAL,
                     false);
             rvListRoom.setLayoutManager(layoutManager);
             rvListRoom.setAdapter(listRoomAdapter);
+
             listRoomAdapter.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onClick(int pos) {
                     Room room = roomCategory.getListRoom().get(pos);
                     // TODO : chuyen man hinh chi tiet
+                }
+
+                @Override
+                public void onLikeClick(int pos) {
+
+                    Room room = roomCategory.getListRoom().get(pos);
+
+                    UserHelper.removeRoomLiked(room.getId());
+                    listRoomAdapter.notifyDataSetChanged();
                 }
             });
 
