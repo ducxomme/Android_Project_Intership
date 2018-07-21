@@ -1,4 +1,4 @@
-package com.example.huuduc.intership_project.ui.fragment;
+package com.example.huuduc.intership_project.ui.fragment.fragment_like;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,11 +14,22 @@ import com.example.huuduc.intership_project.ui.adapter.LikeAdapter;
 
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class LikeFragment extends Fragment {
 
     private LikeAdapter likeAdapter;
     private List<Room> listLikedRoom;
     private RecyclerView rvLikeRoom;
+
+    private SweetAlertDialog pDialog;
+
+    public LikeFragment() {
+    }
+
+    public static LikeFragment newInstance() {
+        return new LikeFragment();
+    }
 
     @Nullable
     @Override

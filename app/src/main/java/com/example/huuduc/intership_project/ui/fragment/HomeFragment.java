@@ -1,5 +1,6 @@
 package com.example.huuduc.intership_project.ui.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.example.huuduc.intership_project.R;
 import com.example.huuduc.intership_project.data.helper.RoomHelper;
@@ -21,13 +21,14 @@ import com.example.huuduc.intership_project.ui.adapter.CategoryAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class HomeFragment extends Fragment {
     private CategoryAdapter adapter;
     private List<RoomCategory> listCategory;
-    private ProgressBar progressBar;
     private RecyclerView rvCategory;
 
-//    Map<Room, Double> listRoomRating;
+    private SweetAlertDialog pDialog;
 
     public HomeFragment() {
     }
@@ -36,18 +37,11 @@ public class HomeFragment extends Fragment {
         return new HomeFragment();
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        progressBar = view.findViewById(R.id.progressBar);
         rvCategory = view.findViewById(R.id.rvCategory);
         rvCategory.setHasFixedSize(true);
         listCategory = new ArrayList<>();
@@ -58,7 +52,12 @@ public class HomeFragment extends Fragment {
         rvCategory.setLayoutManager(new LinearLayoutManager(getContext()));
         rvCategory.setAdapter(adapter);
 
-        progressBar.setVisibility(View.VISIBLE);
+
+        pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        pDialog.setTitleText("Loading");
+        pDialog.setCancelable(false);
+        pDialog.show();
 
         RoomHelper.getAllBestSeenRoom(new RoomListListener() {
             @Override
@@ -91,6 +90,7 @@ public class HomeFragment extends Fragment {
                 listCategory.add(roomCategory2);
 
                 adapter.notifyDataSetChanged();
+                pDialog.dismiss();
             }
 
             @Override
@@ -101,7 +101,6 @@ public class HomeFragment extends Fragment {
             public void OnSuccess_RoomLike(List<String> listRoomLike) {
             }
         });
-        progressBar.setVisibility(View.INVISIBLE);
         return view;
 
     }
