@@ -1,16 +1,10 @@
 package com.example.huuduc.intership_project.ui.fragment.home_fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
-import com.example.huuduc.intership_project.ui.activity.main.MainActivity;
 import com.example.huuduc.intership_project.R;
 import com.example.huuduc.intership_project.data.helper.RoomHelper;
 import com.example.huuduc.intership_project.data.listener.RoomListListener;
@@ -28,6 +22,7 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView{
     private RecyclerView rvCategory;
 
 
+    private HomeFragmentPresenter mPresenter;
     public HomeFragment() {
     }
 
@@ -43,7 +38,7 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView{
 
     @Override
     public void initializeLayout(View view) {
-
+        mPresenter = new HomeFragmentPresenter(getBaseContext(), this);
     }
 
     @Override
@@ -60,46 +55,20 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView{
         rvCategory.setLayoutManager(new LinearLayoutManager(getContext()));
         rvCategory.setAdapter(adapter);
 
-        RoomHelper.getAllBestSeenRoom(new RoomListListener() {
-            @Override
-            public void OnSuccess(List<Room> listRoom) {
+        mPresenter.loadData();
 
-                RoomCategory roomCategory1 = new RoomCategory();
-                roomCategory1.setCategoryName("Phòng xem nhiều");
+    }
 
-                roomCategory1.setListRoom(listRoom);
-                listCategory.add(roomCategory1);
-                adapter.notifyDataSetChanged();
-            }
+    @Override
+    public void updateCategorySeen(RoomCategory listRoom) {
 
-            @Override
-            public void OnFailed(String error) {
-            }
+        listCategory.add(listRoom);
+        adapter.notifyDataSetChanged();
+    }
 
-            @Override
-            public void OnSuccess_RoomLike(List<String> listRoomLike) {
-            }
-        });
-
-
-        RoomHelper.getBestRatingRoom(new RoomListListener() {
-            @Override
-            public void OnSuccess(List<Room> listRoom) {
-                RoomCategory roomCategory2 = new RoomCategory();
-                roomCategory2.setCategoryName("Phòng nổi bật");
-                roomCategory2.setListRoom(listRoom);
-                listCategory.add(roomCategory2);
-
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void OnFailed(String error) {
-            }
-
-            @Override
-            public void OnSuccess_RoomLike(List<String> listRoomLike) {
-            }
-        });
+    @Override
+    public void updateCategoryRating(RoomCategory roomCategory2) {
+        listCategory.add(roomCategory2);
+        adapter.notifyDataSetChanged();
     }
 }
