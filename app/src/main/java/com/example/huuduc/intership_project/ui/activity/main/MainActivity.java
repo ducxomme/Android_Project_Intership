@@ -1,16 +1,17 @@
-package com.example.huuduc.intership_project;
+package com.example.huuduc.intership_project.ui.activity.main;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.example.huuduc.intership_project.ui.fragment.HomeFragment;
+import com.example.huuduc.intership_project.R;
+import com.example.huuduc.intership_project.ui.base.BaseActivity;
+import com.example.huuduc.intership_project.ui.fragment.home_fragment.HomeFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity implements IMainView{
 
     private static final String SELECTED_ITEM = "arg_selected_item";
     private BottomNavigationView navigation;

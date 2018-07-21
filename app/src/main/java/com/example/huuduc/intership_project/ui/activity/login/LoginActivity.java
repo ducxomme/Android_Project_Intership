@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.huuduc.intership_project.MainActivity;
+import com.example.huuduc.intership_project.ui.activity.main.MainActivity;
 import com.example.huuduc.intership_project.R;
 import com.example.huuduc.intership_project.ui.base.BaseActivity;
 import com.example.huuduc.intership_project.utils.DatabaseService;
@@ -16,6 +16,7 @@ import com.example.huuduc.intership_project.utils.DatabaseService;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class LoginActivity extends BaseActivity implements ILoginView{
 
@@ -62,13 +63,13 @@ public class LoginActivity extends BaseActivity implements ILoginView{
 
     @Override
     public void loginSuccess() {
-        showMessage(getString(R.string.login_success));
+        showMessage("Message", getString(R.string.login_success), SweetAlertDialog.SUCCESS_TYPE);
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
     }
 
     @Override
     public void loginFailed() {
-        showMessage(getString(R.string.login_failed));
+        showMessage("Message", getString(R.string.login_failed), SweetAlertDialog.ERROR_TYPE);
     }
 }

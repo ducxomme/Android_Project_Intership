@@ -1,15 +1,9 @@
-package com.example.huuduc.intership_project.ui.fragment;
+package com.example.huuduc.intership_project.ui.fragment.home_fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.huuduc.intership_project.R;
 import com.example.huuduc.intership_project.data.helper.RoomHelper;
@@ -17,18 +11,16 @@ import com.example.huuduc.intership_project.data.listener.RoomListListener;
 import com.example.huuduc.intership_project.data.model.Room;
 import com.example.huuduc.intership_project.data.model.RoomCategory;
 import com.example.huuduc.intership_project.ui.adapter.CategoryAdapter;
+import com.example.huuduc.intership_project.ui.base.BaseFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.pedant.SweetAlert.SweetAlertDialog;
-
-public class HomeFragment extends Fragment {
+public class HomeFragment extends BaseFragment implements IHomeFragmentView{
     private CategoryAdapter adapter;
     private List<RoomCategory> listCategory;
     private RecyclerView rvCategory;
 
-    private SweetAlertDialog pDialog;
 
     public HomeFragment() {
     }
@@ -37,11 +29,21 @@ public class HomeFragment extends Fragment {
         return new HomeFragment();
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+    @Override
+    public int contentViewLayout() {
+        return R.layout.fragment_home;
+    }
+
+    @Override
+    public void initializeLayout(View view) {
+
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         rvCategory = view.findViewById(R.id.rvCategory);
         rvCategory.setHasFixedSize(true);
         listCategory = new ArrayList<>();
@@ -51,13 +53,6 @@ public class HomeFragment extends Fragment {
 
         rvCategory.setLayoutManager(new LinearLayoutManager(getContext()));
         rvCategory.setAdapter(adapter);
-
-
-        pDialog = new SweetAlertDialog(getContext(), SweetAlertDialog.PROGRESS_TYPE);
-        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-        pDialog.setTitleText("Loading");
-        pDialog.setCancelable(false);
-        pDialog.show();
 
         RoomHelper.getAllBestSeenRoom(new RoomListListener() {
             @Override
@@ -90,7 +85,6 @@ public class HomeFragment extends Fragment {
                 listCategory.add(roomCategory2);
 
                 adapter.notifyDataSetChanged();
-                pDialog.dismiss();
             }
 
             @Override
@@ -101,8 +95,5 @@ public class HomeFragment extends Fragment {
             public void OnSuccess_RoomLike(List<String> listRoomLike) {
             }
         });
-        return view;
-
     }
-
 }

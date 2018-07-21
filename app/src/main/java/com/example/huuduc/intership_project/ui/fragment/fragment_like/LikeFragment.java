@@ -17,15 +17,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
-public class LikeFragment extends BaseFragment<LikeFragmentPresenter> implements ILikeFragmentView{
+public class LikeFragment extends BaseFragment implements ILikeFragmentView{
 
     private LikeAdapter mLikeAdapter;
     private List<Room> mListLikedRoom;
+    private LikeFragmentPresenter mPresenter;
 
     @BindView(R.id.rvLikeRoom)
-    private RecyclerView rvLikeRoom;
+    RecyclerView rvLikeRoom;
 
 
     public LikeFragment() {
@@ -35,11 +35,20 @@ public class LikeFragment extends BaseFragment<LikeFragmentPresenter> implements
         return new LikeFragment();
     }
 
+    @Override
+    public int contentViewLayout() {
+        return 0;
+    }
+
+    @Override
+    public void initializeLayout(View view) {
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_like, container, false);
-        mUnBinder = ButterKnife.bind(this, view);
         return super.onCreateView(inflater, container, savedInstanceState);
 
     }

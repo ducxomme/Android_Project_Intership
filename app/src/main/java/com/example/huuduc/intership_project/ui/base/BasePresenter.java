@@ -7,7 +7,7 @@ import android.net.NetworkInfo;
 import com.example.huuduc.intership_project.data.network.api.ApiService;
 import com.example.huuduc.intership_project.data.network.api.ApiUtils;
 
-public abstract class BasePresenter {
+public abstract class BasePresenter<T extends BaseView> {
     protected ApiService mApiService;
 
     public BasePresenter() {
