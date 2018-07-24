@@ -5,24 +5,29 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.huuduc.intership_project.R;
+import com.example.huuduc.intership_project.ui.activity.filter.FillterActivity;
 import com.example.huuduc.intership_project.ui.base.BaseActivity;
-import com.example.huuduc.intership_project.ui.base.BaseView;
 import com.example.huuduc.intership_project.ui.fragment.home_fragment.HomeFragment;
 
-public class MainActivity extends BaseActivity implements IMainView{
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class MainActivity extends BaseActivity implements IMainView {
 
     private static final String SELECTED_ITEM = "arg_selected_item";
     private BottomNavigationView navigation;
     private int mSelectedItem;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         addControls(savedInstanceState);
         addEvents();
 
@@ -107,6 +112,15 @@ public class MainActivity extends BaseActivity implements IMainView{
 //        });
     }
 
+    @OnClick(R.id.btnSearch)
+    void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btnSearch:
+                goNextScreen(FillterActivity.class);
+                break;
+        }
+    }
+
     private void addEvents() {
 
         navigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -117,6 +131,7 @@ public class MainActivity extends BaseActivity implements IMainView{
             }
         });
     }
+
     private void addControls(Bundle savedInstanceState) {
         navigation = findViewById(R.id.navigation);
         // attaching bottom sheet behaviour - hide / show on scroll
@@ -135,9 +150,9 @@ public class MainActivity extends BaseActivity implements IMainView{
 
     private void selectedFragment(MenuItem item) {
         Fragment fragment = null;
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.navigation_home:
-                fragment =  HomeFragment.newInstance();
+                fragment = HomeFragment.newInstance();
                 break;
             case R.id.my_list:
 //                fragment = LikeFragment.newInstance();
@@ -148,7 +163,7 @@ public class MainActivity extends BaseActivity implements IMainView{
         }
         // update selected item
         mSelectedItem = item.getItemId();
-        if(fragment != null){
+        if (fragment != null) {
             android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.frMain, fragment).commit();
