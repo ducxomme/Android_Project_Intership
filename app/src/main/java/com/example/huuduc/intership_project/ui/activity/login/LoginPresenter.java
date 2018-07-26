@@ -32,7 +32,7 @@ public class LoginPresenter extends BasePresenter implements ILoginPresenter{
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                iLoginView.loginFailed();
+                iLoginView.loginFailed(e.getMessage());
             }
         });
     }

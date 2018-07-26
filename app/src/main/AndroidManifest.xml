@@ -9,6 +9,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:windowSoftInputMode="adjustResize"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
@@ -25,6 +26,14 @@
         </activity>
 
         <activity android:name=".ui.activity.register.RegisterActivity">
+
+        </activity>
+        <activity android:name=".ui.activity.forgot_pass.ForgotPassActivity">
+
+        </activity>
+
+        <activity android:name=".ui.activity.room_detail.RoomDetailActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden">
 
         </activity>
     </application>

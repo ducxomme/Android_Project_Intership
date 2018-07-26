@@ -18,15 +18,15 @@
         <ImageView
             android:id="@+id/btnSearch"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="24dp"
             android:src="@drawable/ic_search" />
 
         <ImageView
             android:id="@+id/ivIcon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_gravity="center_horizontal"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@drawable/ic_home" />
 
         <ImageView
             android:id="@+id/btnAdd"
@@ -45,13 +45,16 @@
         android:layout_weight="1">
 
     </FrameLayout>
+
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/frMain"
         android:layout_gravity="bottom"
         android:background="#CDCDCD"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_insetEdge="bottom"
         app:menu="@menu/menu" />
 
 </LinearLayout>

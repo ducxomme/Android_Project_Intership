@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.huuduc.intership_project.R;
 import com.example.huuduc.intership_project.data.helper.UserHelper;
@@ -22,6 +21,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     private Context context;
     private List<RoomCategory> listCategory;
+
 
     public CategoryAdapter(Context context, List<RoomCategory> listCategory) {
         this.context = context;
@@ -74,7 +74,8 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
                 @Override
                 public void onClick(int pos) {
                     Room room = roomCategory.getListRoom().get(pos);
-                    // TODO : chuyen man hinh chi tiet
+
+                    listener.roomClick(room);
                 }
 
                 @Override
@@ -82,11 +83,21 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
                     Room room = roomCategory.getListRoom().get(pos);
 
-                    UserHelper.removeRoomLiked(room.getId());
+                    UserHelper.likeUnlikeRoom(room.getId());
                     listRoomAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void roomClick(Room room) {
+
                 }
             });
 
         }
+    }
+
+    private OnItemClickListener listener;
+    public void setOnClick(OnItemClickListener listener){
+        this.listener = listener;
     }
 }

@@ -40,6 +40,77 @@ public class RoomHelper {
        });
     }
 
+    public static void getAllLikedRoomByUser(final RoomListListener roomListListener){
+        UserHelper.getAllRoomLiked(new RoomListListener() {
+            @Override
+            public void OnSuccess(List<Room> listRoom) {}
+
+            @Override
+            public void OnFailed(String error) {roomListListener.OnFailed(error);}
+
+            @Override
+            public void OnSuccess_RoomLike(List<String> listRoomLike) {
+                final List<Room> listLikedRoom = new ArrayList<>();
+                for (int i = 0; i < listRoomLike.size(); i++){
+                    mRoomRef.child(listRoomLike.get(i)).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Room room = dataSnapshot.getValue(Room.class);
+                            Log.e("RoomID : onDataChange", room.getId());
+                            listLikedRoom.add(room);
+                            Log.e("listLikedRoom.size" , listLikedRoom.size()+"");
+                            if (listLikedRoom.size() == listRoomLike.size()){
+                                Log.e("in If", listLikedRoom.size()+"");
+                                roomListListener.OnSuccess(listLikedRoom);
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            roomListListener.OnFailed(databaseError.getMessage());
+                        }
+                    });
+                }
+//                Log.e("outsidelistLikedRoom", listLikedRoom.size()+"");
+//                roomListListener.OnSuccess(listLikedRoom);
+            }
+        });
+    }
+    public static void getAllMyRoom(final RoomListListener roomListListener){
+        UserHelper.getAllMyRoomID(new RoomListListener() {
+            @Override
+            public void OnSuccess(List<Room> listRoom) {
+            }
+
+            @Override
+            public void OnFailed(String error) {
+            }
+
+            @Override
+            public void OnSuccess_RoomLike(List<String> listRoomLike) {
+                final List<Room> myRooms = new ArrayList<>();
+                for (int i = 0; i < listRoomLike.size(); i++){
+                    mRoomRef.child(listRoomLike.get(i)).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Room room = dataSnapshot.getValue(Room.class);
+                            Log.e("RoomID : onDataChange", room.getId());
+                            myRooms.add(room);
+                            Log.e("listLikedRoom.size" , myRooms.size()+"");
+                            if (myRooms.size() == listRoomLike.size()){
+                                Log.e("in If", myRooms.size()+"");
+                                roomListListener.OnSuccess(myRooms);
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            roomListListener.OnFailed(databaseError.getMessage());
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     public static void getAllBestSeenRoom(final  RoomListListener roomListListener){
 
         Log.e("RoomHelper", "inside");

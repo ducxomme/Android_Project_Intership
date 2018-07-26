@@ -1,4 +1,4 @@
-package com.example.huuduc.intership_project.ui.fragment.home_fragment;
+package com.example.huuduc.intership_project.ui.fragment.fragment_home;
 
 import com.example.huuduc.intership_project.data.model.RoomCategory;
 import com.example.huuduc.intership_project.ui.base.BaseView;

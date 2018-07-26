@@ -1,6 +1,8 @@
 package com.example.huuduc.intership_project.data.model;
 
-public class Room {
+import java.io.Serializable;
+
+public class Room implements Serializable{
     public String id;
     public String user_id;
     public String ward;
@@ -13,11 +15,12 @@ public class Room {
     public int seen;
     public int room_empty;
     public String rating;
+    public String description;
 
     public Room() {
     }
 
-    public Room(String id, String user_id, String ward, String district, int area, int price, String date_public, String image, String address, int seen, int room_empty, String rating) {
+    public Room(String id, String user_id, String ward, String district, int area, int price, String date_public, String image, String address, int seen, int room_empty, String rating, String description) {
         this.id = id;
         this.user_id = user_id;
         this.ward = ward;
@@ -30,6 +33,7 @@ public class Room {
         this.seen = seen;
         this.room_empty = room_empty;
         this.rating = rating;
+        this.description = description;
     }
 
     public String getId() {
@@ -126,5 +130,13 @@ public class Room {
 
     public void setRating(String rating) {
         this.rating = rating;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

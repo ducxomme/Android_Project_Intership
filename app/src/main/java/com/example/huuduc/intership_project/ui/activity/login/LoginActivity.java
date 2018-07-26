@@ -7,16 +7,18 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
-import com.example.huuduc.intership_project.ui.activity.main.MainActivity;
 import com.example.huuduc.intership_project.R;
+import com.example.huuduc.intership_project.ui.activity.forgot_pass.ForgotPassActivity;
+import com.example.huuduc.intership_project.ui.activity.main.MainActivity;
+import com.example.huuduc.intership_project.ui.activity.register.RegisterActivity;
 import com.example.huuduc.intership_project.ui.base.BaseActivity;
 import com.example.huuduc.intership_project.utils.DatabaseService;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class LoginActivity extends BaseActivity implements ILoginView{
 
@@ -28,12 +30,19 @@ public class LoginActivity extends BaseActivity implements ILoginView{
     EditText edPassword;
     @BindView(R.id.btnLogin)
     Button btnLogin;
+    @BindView(R.id.tvForgotPass)
+    TextView tvForgotPass;
+    @BindView(R.id.btnSignup)
+    TextView btnSignup;
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+
         mLoginPresenter = new LoginPresenter(this);
     }
 
@@ -51,25 +60,37 @@ public class LoginActivity extends BaseActivity implements ILoginView{
         finish();
     }
 
-    @OnClick({R.id.btnLogin})
+    @OnClick({R.id.btnLogin, R.id.btnSignup, R.id.tvForgotPass})
     void onClick(View view){
-        String email = edEmail.getText().toString().trim();
-        String password = edPassword.getText().toString().trim();
+        switch (view.getId()){
+            case R.id.btnLogin:
+                String email = edEmail.getText().toString().trim();
+                String password = edPassword.getText().toString().trim();
 
-        if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
-            mLoginPresenter.onClickLogin(email, password);
+                if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)){
+                    showLoading("Đăng nhập");
+                    mLoginPresenter.onClickLogin(email, password);
+                }
+                break;
+            case R.id.btnSignup:
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+                break;
+            case R.id.tvForgotPass:
+                startActivity(new Intent(LoginActivity.this, ForgotPassActivity.class));
+                break;
         }
+
     }
 
     @Override
     public void loginSuccess() {
-        showMessage("Message", getString(R.string.login_success), SweetAlertDialog.SUCCESS_TYPE);
+        hideLoading();
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
         finish();
     }
 
     @Override
-    public void loginFailed() {
-        showMessage("Message", getString(R.string.login_failed), SweetAlertDialog.ERROR_TYPE);
+    public void loginFailed(String error) {
+        hideLoading(error, false);
     }
 }

@@ -32,7 +32,7 @@ public class RegisterPresenter extends BasePresenter implements IRegisterPresent
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    User user = new User(username, email, task.getResult().getUser().getUid());
+                    User user = new User(username, email, task.getResult().getUser().getUid(), true, null, null, "");
                     addNewUserFirebase(user);
                 }
             }

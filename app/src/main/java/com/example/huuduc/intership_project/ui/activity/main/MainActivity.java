@@ -9,7 +9,9 @@ import android.view.MenuItem;
 
 import com.example.huuduc.intership_project.R;
 import com.example.huuduc.intership_project.ui.base.BaseActivity;
-import com.example.huuduc.intership_project.ui.fragment.home_fragment.HomeFragment;
+import com.example.huuduc.intership_project.ui.fragment.fragment_home.HomeFragment;
+import com.example.huuduc.intership_project.ui.fragment.fragment_like.LikeFragment;
+import com.example.huuduc.intership_project.ui.fragment.fragment_profile.ProfileFragment;
 
 public class MainActivity extends BaseActivity implements IMainView{
 
@@ -23,86 +25,6 @@ public class MainActivity extends BaseActivity implements IMainView{
         setContentView(R.layout.activity_main);
         addControls(savedInstanceState);
         addEvents();
-
-//        RoomHelper.getAllRoom(new RoomListListener() {
-//            @Override
-//            public void OnSuccess(List<Room> listRoom) {
-//                for(Room room : listRoom){
-//                    Log.e("ROm", room.getId() + room.getWard());
-//                }
-//            }
-//
-//            @Override
-//            public void OnFailed(String error) {
-//
-//            }
-//        });
-
-//        UserHelper.getAllRoomLiked(new RoomListListener() {
-//            @Override
-//            public void OnSuccess(List<?> listRoom) {
-//                for (int i = 0; i < listRoom.size(); i++){
-//                    Log.e("ROOM_ID", listRoom.get(i).toString());
-//                }
-//            }
-//
-//            @Override
-//            public void OnFailed(String error) {
-//
-//            }
-//
-//            @Override
-//            public void OnSuccess_Rating(float rating) {
-//
-//            }
-//        });
-//
-//        RatingHelper.getRating("XjeTdoRw0XYHIgDfFVKVyabyOcw2", new RoomListListener() {
-//            @Override
-//            public void OnSuccess(List<?> listRoom) {
-//
-//            }
-//
-//            @Override
-//            public void OnFailed(String error) {
-//
-//            }
-//
-//            @Override
-//            public void OnSuccess_Rating(double rating) {
-//                Log.d("Rating", String.valueOf(rating));
-//            }
-//        });
-
-//        RoomHelper.getAllBestSeenRoom(new RoomListListener() {
-//            @Override
-//            public void OnSuccess(List<Room> listRoom) {
-//                for (int i = 0; i < listRoom.size(); i++){
-//                    Log.e("ROOM_ID", listRoom.get(i).toString());
-//                }
-//            }
-//
-//            @Override
-//            public void OnFailed(String error) {}
-//
-//            @Override
-//            public void OnSuccess_RoomLike(List<String> listRoomLike) {}
-//        });
-
-//        RoomHelper.getBestRatingRoom(new RoomListListener() {
-//            @Override
-//            public void OnSuccess(List<Room> listRoom) {
-//                for (int i = 0; i < listRoom.size(); i++){
-//                    Log.e("ROOM_ID", listRoom.get(i).toString());
-//                }
-//            }
-//            @Override
-//            public void OnFailed(String error) {
-//            }
-//            @Override
-//            public void OnSuccess_RoomLike(List<String> listRoomLike) {
-//            }
-//        });
     }
 
     private void addEvents() {
@@ -138,10 +60,10 @@ public class MainActivity extends BaseActivity implements IMainView{
                 fragment =  HomeFragment.newInstance();
                 break;
             case R.id.my_list:
-//                fragment = LikeFragment.newInstance();
+                fragment = LikeFragment.newInstance();
                 break;
             case R.id.profile:
-//                fragment = ProfileFragment.newIntance();
+                fragment = ProfileFragment.newIntance();
                 break;
         }
         // update selected item

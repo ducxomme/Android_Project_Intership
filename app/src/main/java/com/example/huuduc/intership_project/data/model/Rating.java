@@ -2,60 +2,60 @@ package com.example.huuduc.intership_project.data.model;
 
 public class Rating {
 
-    private String one_star;
-    private String two_star;
-    private String three_star;
-    private String four_star;
-    private String five_star;
+    private String one;
+    private String two;
+    private String three;
+    private String four;
+    private String five;
 
     public Rating() {
     }
 
     public Rating(String one_star, String two_star, String three_star, String four_star, String five_star) {
-        this.one_star = one_star;
-        this.two_star = two_star;
-        this.three_star = three_star;
-        this.four_star = four_star;
-        this.five_star = five_star;
+        this.one = one_star;
+        this.two = two_star;
+        this.three = three_star;
+        this.four = four_star;
+        this.five = five_star;
     }
 
-    public String getOne_star() {
-        return one_star;
+    public String getOne() {
+        return one;
     }
 
-    public void setOne_star(String one_star) {
-        this.one_star = one_star;
+    public void setOne(String one) {
+        this.one = one;
     }
 
-    public String getTwo_star() {
-        return two_star;
+    public String getTwo() {
+        return two;
     }
 
-    public void setTwo_star(String two_star) {
-        this.two_star = two_star;
+    public void setTwo(String two) {
+        this.two = two;
     }
 
-    public String getThree_star() {
-        return three_star;
+    public String getThree() {
+        return three;
     }
 
-    public void setThree_star(String three_star) {
-        this.three_star = three_star;
+    public void setThree(String three) {
+        this.three = three;
     }
 
-    public String getFour_star() {
-        return four_star;
+    public String getFour() {
+        return four;
     }
 
-    public void setFour_star(String four_star) {
-        this.four_star = four_star;
+    public void setFour(String four) {
+        this.four = four;
     }
 
-    public String getFive_star() {
-        return five_star;
+    public String getFive() {
+        return five;
     }
 
-    public void setFive_star(String five_star) {
-        this.five_star = five_star;
+    public void setFive(String five) {
+        this.five = five;
     }
 }

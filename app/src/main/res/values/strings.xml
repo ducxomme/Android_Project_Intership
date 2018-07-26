@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Room Market</string>
 
-    <string name="register">Đăng kí</string>
+    <string name="register"><u>Đăng kí</u></string>
     <string name="login">Đăng nhập</string>
     <string name="username">Tên đăng nhập</string>
     <string name="password">Mật khẩu</string>
@@ -24,6 +24,21 @@
     <string name="my_list">My List</string>
     <string name="profile">My Profile</string>
     <string name="listlike">Yêu thích</string>
+    <string name="forgot_pass">Quên mật khẩu?</string>
+    <string name="gender">Giới tính</string>
+    <string name="male">Nam</string>
+    <string name="female">Nữ</string>
+    <string name="logout"><u>Đăng xuất</u></string>
+
+    <string name="forgot_password_msg">Vui lòng điền Email đăng ký của bạn để nhận Password mới</string>
+    <string name="btn_reset_password">Reset Password</string>
+    <string name="room_description"># 1- chính chủ cho thuê văn phòng kinh doanh đường 297 diện tích sử dụng 90 m2 (giá 3,5 triệu ) (không ở lại )
+# 2- chính chủ cho thuê căn nhà mặt tiền đường ngô quyền q9 diện tích 85m2 , 1 trệt 1 lầu, 3 phòng ngủ ( giá 9,5 triệu)
+# 3 - chính chủ cho thuê nhà mặt tiền đỗ xuân hợp 1 trệt 3 lầu, 4 phòng ngủ diện tích 90m2 ( giá 21 triệu )
+# 4 - cho thuê nhà mặt tiền đường 339 , 1 trệt 2 lầu, 4 phòng ngủ diện tích 100m2 ( giá 16 triệu )
+tấc cả nhà đều nằm ngay trung tâm, các trường cao đẳng công thương , đại học văn hóa, cao đẳng kỹ nghệ, gần khu nhà ở nam hòa sầm uất, nơi hội tụ những cty bất động sản, dịch vụ ăn uống 24h, lotte, con cung....
+tấc cả nhà trên đều nằm ở những con đường huyết mạch, dân cư đông đúc phù hợp kinh doanh tấc cả các nghành nghề,
+    </string>
 
 
 </resources>
