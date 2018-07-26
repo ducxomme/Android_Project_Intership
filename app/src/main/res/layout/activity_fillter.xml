@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.filter.FillterActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:titleTextColor="@color/white">
+
+        </android.support.v7.widget.Toolbar>
+
+        <TextView
+            android:id="@+id/lbTitlePrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mức giá"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/title_text_size"
+            android:layout_marginTop="@dimen/margin"
+            android:layout_marginStart="@dimen/margin"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+
+        <TextView
+            android:id="@+id/lbPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="500,000 VNĐ - 1,000,000 VNĐ"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/subheading_size"
+            android:layout_marginTop="@dimen/margin"
+            android:layout_marginStart="@dimen/margin"
+            app:layout_constraintTop_toBottomOf="@id/lbTitlePrice"/>
+
+
+        <SeekBar
+            android:id="@+id/sbPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="10000000"
+            android:progress="500000"
+            android:layout_marginTop="@dimen/margin"
+            app:layout_constraintTop_toBottomOf="@id/lbPrice"/>
+
+        <TextView
+            android:id="@+id/lbDistrict"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quận/Huyện"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/title_text_size"
+            android:layout_marginTop="@dimen/margin"
+            android:layout_marginStart="@dimen/margin"
+            app:layout_constraintTop_toBottomOf="@id/sbPrice"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvDistrict"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/lbDistrict">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/lbWard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Phường/Xã"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/title_text_size"
+            android:layout_marginTop="@dimen/margin"
+            android:layout_marginStart="@dimen/margin"
+            app:layout_constraintTop_toBottomOf="@id/rvDistrict"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvWard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/lbWard">
+
+        </android.support.v7.widget.RecyclerView>
+
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v4.widget.NestedScrollView>

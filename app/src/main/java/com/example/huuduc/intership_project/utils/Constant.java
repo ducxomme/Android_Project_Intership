@@ -12,4 +12,5 @@ public class Constant {
     public static final String ROOM_BUNDLE = "ROOM_BUNDLE";
 
 
+    public static final String DISTRICT_REFERENCE = "District_Ward";
 }
