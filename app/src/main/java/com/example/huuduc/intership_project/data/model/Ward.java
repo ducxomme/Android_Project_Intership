@@ -1,8 +1,9 @@
 package com.example.huuduc.intership_project.data.model;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class Ward {
+public class Ward implements Serializable{
     private String id;
     private String name;
     private Map<String, String> room;

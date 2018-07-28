@@ -1,8 +1,10 @@
 package com.example.huuduc.intership_project.data.helper;
 
 import com.example.huuduc.intership_project.data.listener.CommentListener;
+import com.example.huuduc.intership_project.data.listener.UserListener;
 import com.example.huuduc.intership_project.data.model.Comment;
 import com.example.huuduc.intership_project.data.model.CommentDate;
+import com.example.huuduc.intership_project.data.model.User;
 import com.example.huuduc.intership_project.utils.Constant;
 import com.example.huuduc.intership_project.utils.DatabaseService;
 import com.google.firebase.database.DataSnapshot;
@@ -82,18 +84,28 @@ public class CommentHelper {
     }
 
     public static void putComment(String comment, String roomID) {
-        String key = mCommentRef.child(roomID).child(mDatabase.getFirebaseAuth().getUid()).push().getKey();
+        String key = mCommentRef.child(roomID).push().getKey();
         Comment cmt = new Comment();
         cmt.setComment_id(key);
         cmt.setContent(comment);
-        cmt.setUsername(mDatabase.getDisplayName());
+        UserHelper.getAllUserInfo(new UserListener() {
+            @Override
+            public void success(User user) {
+                cmt.setUsername(user.getUsername());
 
-        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 
-        Date today = Calendar.getInstance().getTime();
-        cmt.setDate(df.format(today));
+                Date today = Calendar.getInstance().getTime();
+                cmt.setDate(df.format(today));
 
-        mCommentRef.child(roomID).child(mDatabase.getFirebaseAuth().getUid()).child(key).setValue(cmt);
+                mCommentRef.child(roomID).child(key).setValue(cmt);
+            }
+
+            @Override
+            public void failed(String error) {}
+        });
+
+
 
     }
 }

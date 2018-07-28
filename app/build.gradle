@@ -60,6 +60,9 @@ dependencies {
     //border circle
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
+    // Mutil Slider
+    implementation 'io.apptik.widget:multislider-holo:1.3'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

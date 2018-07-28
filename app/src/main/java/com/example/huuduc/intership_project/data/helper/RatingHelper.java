@@ -14,16 +14,18 @@ import com.google.firebase.database.ValueEventListener;
 public class RatingHelper {
     public static DatabaseService mDatabase = DatabaseService.getInstance();
     public static DatabaseReference mRatingRef = mDatabase.createDatabase(Constant.RATING_REFERENCE);
+    private static Rating ratingGet;
 
-    public static void getRating (String roomID, final RatingListener RatingListener) {
-        mRatingRef.child(roomID).addValueEventListener(new ValueEventListener() {
+
+    public static void getRating(String roomID, final RatingListener RatingListener) {
+        mRatingRef.child(roomID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 double rating = 0;
                 int numberOfRating = 0;
-                for (DataSnapshot data : dataSnapshot.getChildren()){
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
                     int giaTri = 0;
-                    switch (data.getKey()){
+                    switch (data.getKey()) {
                         case "one":
                             giaTri = 1;
                             break;
@@ -40,12 +42,13 @@ public class RatingHelper {
                             giaTri = 5;
                             break;
                     }
-                    String ratingList = (String)data.getValue();
+                    String ratingList = (String) data.getValue();
                     numberOfRating += Integer.valueOf(ratingList);
                     rating += giaTri * Integer.valueOf(ratingList);
                 }
-                RatingListener.OnSuccess(Math.round(rating/numberOfRating / 0.5) / 2.0);
+                RatingListener.OnSuccess(Math.round(rating / numberOfRating / 0.5) / 2.0);
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -53,44 +56,18 @@ public class RatingHelper {
         });
     }
 
-    public static void putRating (String roomID, int rating, RatingListener ratingListener){
-        mRatingRef.child(roomID).addValueEventListener(new ValueEventListener() {
+    public static void putRating(String roomID, RatingListener ratingListener) {
+        ratingGet = new Rating();
+        mRatingRef.child(roomID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Rating ratingGet = dataSnapshot.getValue(Rating.class);
+                ratingGet = dataSnapshot.getValue(Rating.class);
                 Log.e("Rating get", ratingGet.getFive());
-                switch (rating){
-                    case 1:
-                        mRatingRef.child(roomID).child("one").setValue(String.valueOf(Integer.valueOf(ratingGet.getOne()) + 1));
-                        break;
-                    case 2:
-                        mRatingRef.child(roomID).child("two").setValue(String.valueOf(Integer.valueOf(ratingGet.getTwo()) + 1));
-                        break;
-                    case 3:
-                        mRatingRef.child(roomID).child("three").setValue(String.valueOf(Integer.valueOf(ratingGet.getThree()) + 1));
-                        break;
-                    case 4:
-                        mRatingRef.child(roomID).child("four").setValue(String.valueOf(Integer.valueOf(ratingGet.getFour()) + 1));
-                        break;
-                    case 5:
-                        mRatingRef.child(roomID).child("five").setValue(String.valueOf(Integer.valueOf(ratingGet.getFive()) + 1));
-                        break;
-
-                }
-
-                getRating(roomID, new RatingListener() {
-                    @Override
-                    public void OnSuccess(double rating) {
-                        mDatabase.createDatabase(Constant.ROOM_REFERENCE)
-                                .child(roomID).child("rating").setValue(String.valueOf(rating));
-                    }
-                });
-
+                ratingListener.CallBackRatingGet(ratingGet);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }

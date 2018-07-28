@@ -10,4 +10,6 @@ public interface IFillterView extends BaseView {
     void updateRecycleViewDistrict(List<District> objects);
 
     void updateRecycleViewWard(List<Ward> wards);
+
+//    void startListRoomActivity(List<Room> listRoom);
 }

@@ -6,4 +6,6 @@ public interface IFillterPresenter {
     void loadDistrict();
 
     void loadWards(District district);
+
+//    void handleFilter(District district, Ward ward, int priceStart, int priceEnd);
 }

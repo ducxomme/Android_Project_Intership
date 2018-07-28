@@ -7,7 +7,6 @@ import com.example.huuduc.intership_project.data.listener.CallBackListener;
 import com.example.huuduc.intership_project.data.model.District;
 import com.example.huuduc.intership_project.data.model.Ward;
 import com.example.huuduc.intership_project.ui.base.BasePresenter;
-import com.example.huuduc.intership_project.ui.fragment.home_fragment.IHomeFragmentPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,4 +54,40 @@ public class FillterPresenter extends BasePresenter implements IFillterPresenter
 
         mView.updateRecycleViewWard(wards);
     }
+
+//    @Override
+//    public void handleFilter(District district, Ward ward, int priceStart, int priceEnd) {
+//        if (district == null){
+//            // filter theo gia
+//            RoomHelper.filterRoomByPrice(priceStart, priceEnd, new RoomListListener() {
+//                @Override
+//                public void OnSuccess(List<Room> listRoom) {
+//                    mView.startListRoomActivity(listRoom);
+//                }
+//
+//                @Override
+//                public void OnFailed(String error) {}
+//
+//                @Override
+//                public void OnSuccess_RoomLike(List<String> listRoomLike) {}
+//            });
+//        }else{
+//            RoomHelper.filterRoomByPriceAndAddress(priceStart, priceEnd, district, ward, new RoomListListener() {
+//                @Override
+//                public void OnSuccess(List<Room> listRoom) {
+//                    mView.startListRoomActivity(listRoom);
+//                }
+//
+//                @Override
+//                public void OnFailed(String error) {
+//
+//                }
+//
+//                @Override
+//                public void OnSuccess_RoomLike(List<String> listRoomLike) {
+//
+//                }
+//            });
+//        }
+//    }
 }

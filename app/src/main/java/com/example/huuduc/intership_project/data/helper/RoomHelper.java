@@ -3,7 +3,9 @@ package com.example.huuduc.intership_project.data.helper;
 import android.util.Log;
 
 import com.example.huuduc.intership_project.data.listener.RoomListListener;
+import com.example.huuduc.intership_project.data.model.District;
 import com.example.huuduc.intership_project.data.model.Room;
+import com.example.huuduc.intership_project.data.model.Ward;
 import com.example.huuduc.intership_project.utils.Constant;
 import com.example.huuduc.intership_project.utils.DatabaseService;
 import com.google.firebase.database.DataSnapshot;
@@ -21,49 +23,53 @@ public class RoomHelper {
     public static DatabaseReference mRoomRef = mDatabase.createDatabase(Constant.ROOM_REFERENCE);
 
     public static void getAllRoom(final RoomListListener roomListListener) {
-       mRoomRef.addValueEventListener(new ValueEventListener() {
-           @Override
-           public void onDataChange(DataSnapshot dataSnapshot) {
+        mRoomRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-               List<Room> rooms = new ArrayList<>();
-               for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-                   Room room = dsp.getValue(Room.class);
-                   rooms.add(room); //add result into array list
-               }
-               roomListListener.OnSuccess(rooms);
-           }
+                List<Room> rooms = new ArrayList<>();
+                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
+                    Room room = dsp.getValue(Room.class);
+                    rooms.add(room); //add result into array list
+                }
+                roomListListener.OnSuccess(rooms);
+            }
 
-           @Override
-           public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
                 roomListListener.OnFailed(databaseError.getMessage());
-           }
-       });
+            }
+        });
     }
 
-    public static void getAllLikedRoomByUser(final RoomListListener roomListListener){
+    public static void getAllLikedRoomByUser(final RoomListListener roomListListener) {
         UserHelper.getAllRoomLiked(new RoomListListener() {
             @Override
-            public void OnSuccess(List<Room> listRoom) {}
+            public void OnSuccess(List<Room> listRoom) {
+            }
 
             @Override
-            public void OnFailed(String error) {roomListListener.OnFailed(error);}
+            public void OnFailed(String error) {
+                roomListListener.OnFailed(error);
+            }
 
             @Override
             public void OnSuccess_RoomLike(List<String> listRoomLike) {
                 final List<Room> listLikedRoom = new ArrayList<>();
-                for (int i = 0; i < listRoomLike.size(); i++){
+                for (int i = 0; i < listRoomLike.size(); i++) {
                     mRoomRef.child(listRoomLike.get(i)).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Room room = dataSnapshot.getValue(Room.class);
                             Log.e("RoomID : onDataChange", room.getId());
                             listLikedRoom.add(room);
-                            Log.e("listLikedRoom.size" , listLikedRoom.size()+"");
-                            if (listLikedRoom.size() == listRoomLike.size()){
-                                Log.e("in If", listLikedRoom.size()+"");
+                            Log.e("listLikedRoom.size", listLikedRoom.size() + "");
+                            if (listLikedRoom.size() == listRoomLike.size()) {
+                                Log.e("in If", listLikedRoom.size() + "");
                                 roomListListener.OnSuccess(listLikedRoom);
                             }
                         }
+
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
                             roomListListener.OnFailed(databaseError.getMessage());
@@ -75,7 +81,8 @@ public class RoomHelper {
             }
         });
     }
-    public static void getAllMyRoom(final RoomListListener roomListListener){
+
+    public static void getAllMyRoom(final RoomListListener roomListListener) {
         UserHelper.getAllMyRoomID(new RoomListListener() {
             @Override
             public void OnSuccess(List<Room> listRoom) {
@@ -88,19 +95,20 @@ public class RoomHelper {
             @Override
             public void OnSuccess_RoomLike(List<String> listRoomLike) {
                 final List<Room> myRooms = new ArrayList<>();
-                for (int i = 0; i < listRoomLike.size(); i++){
+                for (int i = 0; i < listRoomLike.size(); i++) {
                     mRoomRef.child(listRoomLike.get(i)).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Room room = dataSnapshot.getValue(Room.class);
                             Log.e("RoomID : onDataChange", room.getId());
                             myRooms.add(room);
-                            Log.e("listLikedRoom.size" , myRooms.size()+"");
-                            if (myRooms.size() == listRoomLike.size()){
-                                Log.e("in If", myRooms.size()+"");
+                            Log.e("listLikedRoom.size", myRooms.size() + "");
+                            if (myRooms.size() == listRoomLike.size()) {
+                                Log.e("in If", myRooms.size() + "");
                                 roomListListener.OnSuccess(myRooms);
                             }
                         }
+
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
                             roomListListener.OnFailed(databaseError.getMessage());
@@ -111,7 +119,7 @@ public class RoomHelper {
         });
     }
 
-    public static void getAllBestSeenRoom(final  RoomListListener roomListListener){
+    public static void getAllBestSeenRoom(final RoomListListener roomListListener) {
 
         Log.e("RoomHelper", "inside");
         mRoomRef.orderByChild("seen").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -121,9 +129,9 @@ public class RoomHelper {
                 Log.e("RoomHelper", "onDataChange");
                 Log.e("RoomHelper", "onDataChange: " + dataSnapshot.getChildrenCount());
                 lisBestSeenRoom.clear();
-                for (DataSnapshot data : dataSnapshot.getChildren()){
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
                     Room room = data.getValue(Room.class);
-                    Log.e("room", room.getId() +"");
+                    Log.e("room", room.getId() + "");
                     lisBestSeenRoom.add(room);
                 }
                 Collections.reverse(lisBestSeenRoom);
@@ -140,13 +148,13 @@ public class RoomHelper {
 
     }
 
-    public static void getBestRatingRoom (final RoomListListener roomListListener){
+    public static void getBestRatingRoom(final RoomListListener roomListListener) {
         final List<Room> listBestRatingRoom = new ArrayList<>();
         mRoomRef.orderByChild("rating").startAt("3").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listBestRatingRoom.clear();
-                for (DataSnapshot data : dataSnapshot.getChildren()){
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
                     Room room = data.getValue(Room.class);
                     listBestRatingRoom.add(room);
                 }
@@ -160,5 +168,54 @@ public class RoomHelper {
         });
     }
 
+    public static void filterRoomByPrice(int startPrice, int endPrice, RoomListListener roomListListener) {
 
+        final List<Room> listRoomByPrice = new ArrayList<>();
+        mRoomRef.orderByChild("price").startAt((double) startPrice).endAt((double) endPrice).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listRoomByPrice.clear();
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    listRoomByPrice.add(data.getValue(Room.class));
+                }
+                roomListListener.OnSuccess(listRoomByPrice);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+
+    public static void filterRoomByPriceAndAddress(int priceStart, int priceEnd, District district, Ward ward, RoomListListener roomListListener) {
+        final List<Room> listRoomByPriceAndAddress = new ArrayList<>();
+        // tim trong quan va gia
+        mRoomRef.orderByChild("price").startAt((double) priceStart).endAt((double) priceEnd).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listRoomByPriceAndAddress.clear();
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    Room room = data.getValue(Room.class);
+                    if (ward == null){
+                        if (room.getDistrict().equalsIgnoreCase(district.getName())) {
+                            listRoomByPriceAndAddress.add(room);
+                        }
+                    }else{
+                        if (room.getDistrict().equalsIgnoreCase(district.getName()) &&
+                                room.getWard().equalsIgnoreCase(ward.getName())){
+                            listRoomByPriceAndAddress.add(room);
+                        }
+                    }
+                    roomListListener.OnSuccess(listRoomByPriceAndAddress);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
 }

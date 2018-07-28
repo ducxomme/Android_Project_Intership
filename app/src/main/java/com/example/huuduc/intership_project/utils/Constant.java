@@ -10,6 +10,9 @@ public class Constant {
     public static final String RATING_REFERENCE = "Rating";
     public static final int MAX_RATING = 5;
     public static final String ROOM_BUNDLE = "ROOM_BUNDLE";
+    public static final String LIST_ROOM_BUNDLE = "LIST_ROOM_BUNDLE";
+    public static final String SEARCH_OBJ= "SEARCH_OBJ";
+
 
 
     public static final String DISTRICT_REFERENCE = "District_Ward";

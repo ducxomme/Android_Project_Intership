@@ -13,5 +13,8 @@ public interface IRoomDetailView extends BaseView{
 
     void showImage(List<String> listImage);
 
-    void doneUpdateRating(double rating);
+
+    void havePhone(String type, String phone);
+
+    void haveNotPhone();
 }

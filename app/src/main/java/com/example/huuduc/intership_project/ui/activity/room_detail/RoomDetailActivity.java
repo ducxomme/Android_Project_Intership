@@ -1,8 +1,13 @@
 package com.example.huuduc.intership_project.ui.activity.room_detail;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -33,6 +38,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RoomDetailActivity extends BaseActivity implements IRoomDetailView , BaseSliderView.OnSliderClickListener
@@ -89,6 +95,8 @@ public class RoomDetailActivity extends BaseActivity implements IRoomDetailView 
     //get All image
     HashMap<String, String> hashMapForURL;
 
+    private static final int REQUEST_CALL = 1;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +106,17 @@ public class RoomDetailActivity extends BaseActivity implements IRoomDetailView 
         ButterKnife.bind(this);
 
         addControls();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
     private void addControls() {
@@ -125,16 +144,25 @@ public class RoomDetailActivity extends BaseActivity implements IRoomDetailView 
         mPresenter.getAllImage(room.getId());
     }
 
-    @OnClick({R.id.yourRating, R.id.btnRating})
+    @OnClick({R.id.yourRating, R.id.btnRating, R.id.ivCall, R.id.ivMessage})
     void onClick(View view){
         switch (view.getId()){
             case R.id.yourRating:
                 mPresenter.putDataRating(room.getId(), yourRating.getRating());
+                yourRating.setIndicator(true);
                 break;
             case R.id.btnRating:
                 if (!TextUtils.isEmpty(edComment.getText().toString().trim())){
                     mPresenter.putDataComment(edComment.getText().toString().trim(), room.getId());
+                    showMessage("Thông báo", "Đánh giá thành công", SweetAlertDialog.SUCCESS_TYPE);
+                    edComment.setText("");
                 }
+                break;
+            case R.id.ivCall:
+                mPresenter.getPhoneNumber("call");
+                break;
+            case R.id.ivMessage:
+                mPresenter.getPhoneNumber("message");
                 break;
         }
     }
@@ -207,8 +235,30 @@ public class RoomDetailActivity extends BaseActivity implements IRoomDetailView 
     }
 
     @Override
-    public void doneUpdateRating(double rating) {
+    public void havePhone(String type, String phone) {
+        switch (type){
+            case "call":
+                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE)
+                        != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CALL_PHONE}, REQUEST_CALL);
+                }else{
+                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                    callIntent.setData(Uri.parse("tel:" + phone));
+                    startActivity(callIntent);
+                }
+                break;
 
+            case "message":
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("sms:"+ phone));
+                startActivity(intent);
+                break;
+        }
+    }
+
+    @Override
+    public void haveNotPhone() {
+        showMessage("Thông báo", "Có lỗi xảy ra!", SweetAlertDialog.WARNING_TYPE);
     }
 
     @Override
