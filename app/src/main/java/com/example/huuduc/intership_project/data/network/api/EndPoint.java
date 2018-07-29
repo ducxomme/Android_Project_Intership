@@ -4,8 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class EndPoint<T> {
 
-    @SerializedName("statuscode")
-    public Integer statuscode;
+    @SerializedName("statusCode")
+    public int statuscode;
     @SerializedName("message")
     public String message;
     @SerializedName("data")

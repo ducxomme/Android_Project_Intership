@@ -24,6 +24,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="paddingPercent" value="30" />
+                                                <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -34,7 +35,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/opt/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/communication/ic_message_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/opt/android-studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_check_circle_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -45,7 +46,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="paddingPercent" value="30" />
+                                                <entry key="paddingPercent" value="25" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -56,9 +57,10 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="imageAsset" value="$USER_HOME$/Desktop/icons8-room-32.png" />
-                                      <entry key="outputName" value="ic_message" />
-                                      <entry key="themeColor" value="ff56b2" />
+                                      <entry key="imageAsset" value="$USER_HOME$/Desktop/icons8-delete-32.png" />
+                                      <entry key="outputName" value="ic_check" />
+                                      <entry key="theme" value="CUSTOM" />
+                                      <entry key="themeColor" value="4fff3d" />
                                     </map>
                                   </option>
                                 </PersistentState>

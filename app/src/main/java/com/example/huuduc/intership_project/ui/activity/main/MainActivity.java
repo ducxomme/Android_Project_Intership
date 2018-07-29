@@ -7,14 +7,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.example.huuduc.intership_project.R;
+import com.example.huuduc.intership_project.ui.activity.add_room.CreateRoomActivity;
 import com.example.huuduc.intership_project.ui.activity.filter.FillterActivity;
 import com.example.huuduc.intership_project.ui.base.BaseActivity;
 import com.example.huuduc.intership_project.ui.fragment.fragment_home.HomeFragment;
 import com.example.huuduc.intership_project.ui.fragment.fragment_like.LikeFragment;
 import com.example.huuduc.intership_project.ui.fragment.fragment_profile.ProfileFragment;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -23,6 +26,11 @@ public class MainActivity extends BaseActivity implements IMainView {
     private static final String SELECTED_ITEM = "arg_selected_item";
     private BottomNavigationView navigation;
     private int mSelectedItem;
+
+    @BindView(R.id.btnSearch)
+    ImageView btnSearch;
+    @BindView(R.id.btnAdd)
+    ImageView btnAdd;
 
 
     @Override
@@ -34,11 +42,14 @@ public class MainActivity extends BaseActivity implements IMainView {
         addEvents();
     }
 
-    @OnClick(R.id.btnSearch)
+    @OnClick({R.id.btnSearch, R.id.btnAdd})
     void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnSearch:
                 goNextScreen(FillterActivity.class);
+                break;
+            case R.id.btnAdd:
+                goNextScreen(CreateRoomActivity.class);
                 break;
         }
     }
