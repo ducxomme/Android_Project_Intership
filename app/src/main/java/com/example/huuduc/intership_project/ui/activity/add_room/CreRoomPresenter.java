@@ -14,6 +14,7 @@ import retrofit2.Response;
 public class CreRoomPresenter extends BasePresenter implements ICreRoomPrensenter{
 
     private ICreRoomView mView;
+    private String userChoosenTask;
 
     public CreRoomPresenter(ICreRoomView mView) {
         this.mView = mView;
@@ -64,4 +65,5 @@ public class CreRoomPresenter extends BasePresenter implements ICreRoomPrensente
             }
         });
     }
+
 }

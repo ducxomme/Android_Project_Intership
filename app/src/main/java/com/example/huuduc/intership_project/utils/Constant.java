@@ -16,12 +16,8 @@ public class Constant {
     public static final String DISTRICT = "DISTRICT";
     public static final String WARD = "WARD";
     public static final int REQUEST_CODE = 1;
-
-
-
-
-
-
+    public static final int REQUEST_CAMERA = 2;
+    public static final int SELECT_FILE = 3;
 
     public static final String DISTRICT_REFERENCE = "District_Ward";
 }
