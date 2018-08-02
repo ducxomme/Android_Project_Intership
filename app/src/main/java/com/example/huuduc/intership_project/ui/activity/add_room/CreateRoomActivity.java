@@ -16,6 +16,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,15 +33,21 @@ import com.example.huuduc.intership_project.ui.activity.ward.WardActivity;
 import com.example.huuduc.intership_project.ui.adapter.ImageAdapter;
 import com.example.huuduc.intership_project.ui.base.BaseActivity;
 import com.example.huuduc.intership_project.utils.Constant;
+import com.example.huuduc.intership_project.utils.DatabaseService;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class CreateRoomActivity extends BaseActivity implements ICreRoomView{
 
@@ -50,6 +57,8 @@ public class CreateRoomActivity extends BaseActivity implements ICreRoomView{
     EditText edPrice;
     @BindView(R.id.edArea)
     EditText edArea;
+    @BindView(R.id.edRoomEmpty)
+    EditText edRoomEmpty;
     @BindView(R.id.edDistrict)
     EditText edDistrict;
     @BindView(R.id.edWard)
@@ -93,11 +102,9 @@ public class CreateRoomActivity extends BaseActivity implements ICreRoomView{
     void onClick(View view){
         switch (view.getId()){
             case R.id.edDistrict:
-                hideKeyboard();
                 mPresenter.getAllDistrict();
                 break;
             case R.id.edWard:
-                hideKeyboard();
                 if (district != null){
                     mPresenter.getAllWard(district.getDistrictid());
                 }
@@ -106,6 +113,43 @@ public class CreateRoomActivity extends BaseActivity implements ICreRoomView{
                 handleImage();
                 break;
             case R.id.btnUpRoom:
+                String roomPrice = edPrice.getText().toString().trim();
+                String roomArea = edArea.getText().toString().trim();
+                String roomEmpty = edRoomEmpty.getText().toString().trim();
+                String roomAddress = edAddress.getText().toString().trim();
+                String phone = edPhone.getText().toString().trim();
+                String description = edDescription.getText().toString().trim();
+                if (TextUtils.isEmpty(roomPrice) ||
+                         TextUtils.isEmpty(roomArea) ||
+                         TextUtils.isEmpty(roomEmpty) ||
+                         TextUtils.isEmpty(roomAddress) ||
+                         TextUtils.isEmpty(phone) ||
+                         TextUtils.isEmpty(description)||
+                         district == null || ward == null ||
+                        listImage.size() == 0){
+
+                    showMessage("Thông báo", "Bạn vui lòng nhập đủ thông tin", SweetAlertDialog.WARNING_TYPE);
+                }else{
+//                     get date public
+                    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                    Date today = Calendar.getInstance().getTime();
+
+                    // Set gia tri de qua Presenter
+                    Room room = new Room();
+                    room.setAddress(roomAddress);
+                    room.setArea(Integer.valueOf(roomArea));
+                    room.setDate_public(df.format(today));
+                    room.setDescription(description);
+                    room.setDistrict(district.getType() + " " + district.getName());
+                    room.setImage(listImage.get(0));
+                    room.setPhone(phone);
+                    room.setPrice(Integer.valueOf(roomPrice));
+                    room.setRating("0");
+                    room.setRoom_empty(Integer.valueOf(roomEmpty));
+                    room.setUser_id(DatabaseService.getUserID());
+                    room.setWard(ward.getType() + " " + ward.getName());
+                    mPresenter.pushNewRoom(room, district, ward);
+                }
                 break;
         }
     }
@@ -197,6 +241,11 @@ public class CreateRoomActivity extends BaseActivity implements ICreRoomView{
         bundle.putParcelableArrayList(Constant.LIST_WARD_BUNDLE, (ArrayList)listWard);
         bundle.putParcelable(Constant.WARD, ward);
         this.goNextScreen(WardActivity.class, bundle, Constant.REQUEST_CODE);
+    }
+
+    @Override
+    public void pushRoomSuccess() {
+        showMessage("Thông báo", "Đăng phòng thành công", SweetAlertDialog.SUCCESS_TYPE);
     }
 
     public void handleImage() {

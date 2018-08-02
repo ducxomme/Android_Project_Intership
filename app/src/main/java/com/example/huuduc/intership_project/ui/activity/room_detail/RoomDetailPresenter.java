@@ -2,20 +2,16 @@ package com.example.huuduc.intership_project.ui.activity.room_detail;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 
 import com.example.huuduc.intership_project.data.helper.CommentHelper;
 import com.example.huuduc.intership_project.data.helper.ImageHelper;
 import com.example.huuduc.intership_project.data.helper.RatingHelper;
-import com.example.huuduc.intership_project.data.helper.UserHelper;
 import com.example.huuduc.intership_project.data.listener.CommentListener;
 import com.example.huuduc.intership_project.data.listener.ImageListener;
 import com.example.huuduc.intership_project.data.listener.RatingListener;
-import com.example.huuduc.intership_project.data.listener.UserListener;
 import com.example.huuduc.intership_project.data.model.Comment;
 import com.example.huuduc.intership_project.data.model.Rating;
 import com.example.huuduc.intership_project.data.model.Room;
-import com.example.huuduc.intership_project.data.model.User;
 import com.example.huuduc.intership_project.ui.base.BasePresenter;
 import com.example.huuduc.intership_project.utils.Constant;
 import com.google.firebase.database.DataSnapshot;
@@ -137,22 +133,22 @@ public class RoomDetailPresenter extends BasePresenter implements IRoomDetailPre
     }
 
 
-    @Override
-    public void getPhoneNumber(String type) {
-        UserHelper.getAllUserInfo(new UserListener() {
-            @Override
-            public void success(User user) {
-                if (!TextUtils.isEmpty(user.getPhone())){
-                    mView.havePhone(type, user.getPhone());
-                }else{
-                    mView.haveNotPhone();
-                }
-            }
-
-            @Override
-            public void failed(String error) {
-
-            }
-        });
-    }
+//    @Override
+//    public void getPhoneNumber(String type) {
+//        UserHelper.getAllUserInfo(new UserListener() {
+//            @Override
+//            public void success(User user) {
+//                if (!TextUtils.isEmpty(user.getPhone())){
+//                    mView.havePhone(type, user.getPhone());
+//                }else{
+//                    mView.haveNotPhone();
+//                }
+//            }
+//
+//            @Override
+//            public void failed(String error) {
+//
+//            }
+//        });
+//    }
 }

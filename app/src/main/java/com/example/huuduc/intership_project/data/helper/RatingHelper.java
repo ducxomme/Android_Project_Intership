@@ -72,4 +72,8 @@ public class RatingHelper {
         });
     }
 
+    public static void pushNewRating (String roomID, Rating rating, RatingListener ratingListener){
+        mRatingRef.child(roomID).setValue(rating);
+        ratingListener.OnSuccess(0);
+    }
 }

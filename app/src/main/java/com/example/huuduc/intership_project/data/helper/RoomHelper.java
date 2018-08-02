@@ -218,4 +218,18 @@ public class RoomHelper {
         });
 
     }
+
+    public static void plusRoomSeen (String roomId, int seen){
+        mRoomRef.child(roomId).child("seen").setValue(seen);
+    }
+
+    public static void pushNewRoom(Room room, RoomListListener listener){
+        String key = mRoomRef.push().getKey();
+        room.setId(key);
+
+        mRoomRef.child(key).setValue(room);
+        List<Room> listNew = new ArrayList<>();
+        listNew.add(room);
+        listener.OnSuccess(listNew);
+    }
 }

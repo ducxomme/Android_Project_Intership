@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.example.huuduc.intership_project.R;
+import com.example.huuduc.intership_project.data.helper.RoomHelper;
 import com.example.huuduc.intership_project.data.listener.OnItemClickListener;
 import com.example.huuduc.intership_project.data.model.Room;
 import com.example.huuduc.intership_project.data.model.RoomCategory;
@@ -71,8 +72,9 @@ public class HomeFragment extends BaseFragment implements IHomeFragmentView{
             @Override
             public void roomClick(Room room) {
                 Bundle bundle = new Bundle();
+                RoomHelper.plusRoomSeen(room.getId(), room.getSeen() + 1);
+                room.setSeen(room.getSeen() + 1);
                 bundle.putSerializable(Constant.ROOM_BUNDLE, room);
-
                 mActivity.goNextScreen(RoomDetailActivity.class, bundle);
             }
         });

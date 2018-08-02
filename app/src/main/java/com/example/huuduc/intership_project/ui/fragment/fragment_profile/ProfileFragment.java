@@ -121,10 +121,14 @@ public class ProfileFragment extends BaseFragment implements IProfileView{
         }else{
             edtPhone.setText(user.getPhone());
         }
-        if (user.getGender()){
-            rbMale.setEnabled(true);
-        }else{
-            rbFemale.setEnabled(true);
+        if (user.getGender() != null){
+            if (user.getGender()){
+                rbFemale.setChecked(false);
+                rbMale.setChecked(true);
+            }else{
+                rbMale.setChecked(false);
+                rbFemale.setChecked(true);
+            }
         }
         RoomHelper.getAllMyRoom(new RoomListListener() {
             @Override
@@ -142,7 +146,8 @@ public class ProfileFragment extends BaseFragment implements IProfileView{
             @Override
             public void onClick(int pos) {
                 Room room = mListMyRoom.get(pos);
-                // TODO : chuyen man hinh chi tiet
+                room.setSeen(room.getSeen() + 1);
+                RoomHelper.plusRoomSeen(room.getId(), room.getSeen() + 1);
                 Intent intent = new Intent(getActivity(), RoomDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(Constant.ROOM_BUNDLE,  room);
@@ -166,6 +171,15 @@ public class ProfileFragment extends BaseFragment implements IProfileView{
     @Override
     public void getAllLikedRoom(List<Room> listRoom) {
 
+    }
+
+    @Override
+    public void updateNewInfo(String name, Boolean gender, String phone) {
+        edtName.setText(name);
+        if (gender)
+            rbFemale.setChecked(true);
+        else rbMale.setChecked(true);
+        edtPhone.setText(phone);
     }
 
 }

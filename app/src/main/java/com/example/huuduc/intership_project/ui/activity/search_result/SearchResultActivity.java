@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class SearchResultActivity extends BaseActivity implements ISearchView {
 
@@ -66,5 +67,9 @@ public class SearchResultActivity extends BaseActivity implements ISearchView {
 
         listRoomSearch.addAll(listRoomSearchResult);
         mAdapter.notifyDataSetChanged();
+        if (listRoomSearch.size() == 0){
+            showMessage("Kết quả", "Không có kết quả phù hợp", SweetAlertDialog.SUCCESS_TYPE);
+//            finish();
+        }
     }
 }

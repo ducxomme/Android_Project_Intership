@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.huuduc.intership_project.R;
+import com.example.huuduc.intership_project.data.helper.RoomHelper;
 import com.example.huuduc.intership_project.data.listener.OnItemClickListener;
 import com.example.huuduc.intership_project.data.model.Room;
 import com.example.huuduc.intership_project.ui.activity.room_detail.RoomDetailActivity;
@@ -76,8 +77,9 @@ public class LikeFragment extends BaseFragment implements ILikeView {
                 Room room = mListLikedRoom.get(pos);
 
                 Bundle bundle = new Bundle();
+                room.setSeen(room.getSeen() + 1);
                 bundle.putSerializable(Constant.ROOM_BUNDLE, room);
-
+                RoomHelper.plusRoomSeen(room.getId(), room.getSeen() + 1);
                 mActivity.goNextScreen(RoomDetailActivity.class, bundle);
             }
 

@@ -28,7 +28,7 @@ public class ProfilePresenter extends BasePresenter{
             @Override
             public void success(User user) {
                 mView.hideLoading();
-                Log.e("OnSuccess: RoomID", user +"");
+                Log.e("OnSuccess: UserGenger", user.getGender().toString());
                 mView.getUserSuccess(user);
             }
 
@@ -42,6 +42,7 @@ public class ProfilePresenter extends BasePresenter{
 
     public void updateUser(String name, Boolean gender, String phone){
         UserHelper.updateUserInfo(name, gender, phone);
+        mView.updateNewInfo(name, gender, phone);
     }
 
     public void handleRomoveLike(Room roomDelete) {

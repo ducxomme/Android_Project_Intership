@@ -60,23 +60,29 @@ public class UserHelper {
         });
     }
 
+    public static void pushNewRoomForUser (String roomId) {
+        mUserRef.child("rooms").child(roomId).setValue(roomId);
+    }
+
     public static void updateUserInfo(String newName, Boolean newGender, String newPhone) {
-        mUserRef.addValueEventListener(new ValueEventListener() {
+        mUserRef.runTransaction(new Transaction.Handler() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public Transaction.Result doTransaction(MutableData mutableData) {
+
                 mUserRef.child("name").setValue(newName);
-                // TODO : check save value
                 mUserRef.child("gender").setValue(newGender);
                 mUserRef.child("phone").setValue(newPhone);
+
+
+                return Transaction.success(mutableData);
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
 
             }
         });
     }
-
     public static void likeUnlikeRoom(final String roomID) {
 
         mUserRef.child("like").runTransaction(new Transaction.Handler() {

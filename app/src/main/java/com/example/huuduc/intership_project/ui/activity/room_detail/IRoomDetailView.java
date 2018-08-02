@@ -14,7 +14,7 @@ public interface IRoomDetailView extends BaseView{
     void showImage(List<String> listImage);
 
 
-    void havePhone(String type, String phone);
+//    void havePhone(String type, String phone);
 
-    void haveNotPhone();
+//    void haveNotPhone();
 }

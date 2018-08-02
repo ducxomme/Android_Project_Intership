@@ -11,4 +11,6 @@ public interface IProfileView extends BaseView{
     void getUserSuccess(User user);
 
     void getAllLikedRoom(List<Room> listRoom);
+
+    void updateNewInfo(String name, Boolean gender,String phone);
 }

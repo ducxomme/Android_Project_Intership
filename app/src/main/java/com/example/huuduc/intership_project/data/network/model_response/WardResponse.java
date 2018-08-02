@@ -7,6 +7,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class WardResponse implements Parcelable{
 
+    @SerializedName("wardid")
+    private int wardid;
     @SerializedName("name")
     private String name;
     @SerializedName("type")
@@ -28,6 +30,7 @@ public class WardResponse implements Parcelable{
     };
     public WardResponse(Parcel in) {
         super();
+        wardid = in.readInt();
         name = in.readString();
         type = in.readString();
     }
@@ -48,6 +51,14 @@ public class WardResponse implements Parcelable{
         this.type = type;
     }
 
+    public int getWardid() {
+        return wardid;
+    }
+
+    public void setWardid(int wardid) {
+        this.wardid = wardid;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -55,8 +66,10 @@ public class WardResponse implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(wardid);
         parcel.writeString(name);
         parcel.writeString(type);
+
     }
 
     @Override

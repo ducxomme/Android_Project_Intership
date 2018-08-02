@@ -58,6 +58,7 @@
         android:layout_height="wrap_content"
         android:textSize="10sp"
         android:paddingLeft="3dp"
+        android:paddingBottom="15dp"
         tools:text="17 244 phuong Tang Nhon Phu A, Quan 9"
         app:layout_constraintTop_toBottomOf="@id/tvRoomPrice"/>
 

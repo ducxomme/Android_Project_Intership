@@ -159,11 +159,24 @@ public class RoomDetailActivity extends BaseActivity implements IRoomDetailView 
                 }
                 break;
             case R.id.ivCall:
-                mPresenter.getPhoneNumber("call");
+//                mPresenter.getPhoneNumber("call");
+                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE)
+                        != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CALL_PHONE}, REQUEST_CALL);
+                }else{
+                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                    callIntent.setData(Uri.parse("tel:" + room.getPhone()));
+                    startActivity(callIntent);
+                }
                 break;
+
             case R.id.ivMessage:
-                mPresenter.getPhoneNumber("message");
+//                mPresenter.getPhoneNumber("message");
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("sms:"+ room.getPhone()));
+                startActivity(intent);
                 break;
+
         }
     }
 
@@ -234,32 +247,32 @@ public class RoomDetailActivity extends BaseActivity implements IRoomDetailView 
         }
     }
 
-    @Override
-    public void havePhone(String type, String phone) {
-        switch (type){
-            case "call":
-                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE)
-                        != PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CALL_PHONE}, REQUEST_CALL);
-                }else{
-                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                    callIntent.setData(Uri.parse("tel:" + phone));
-                    startActivity(callIntent);
-                }
-                break;
+//    @Override
+//    public void havePhone(String type, String phone) {
+//        switch (type){
+//            case "call":
+//                if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE)
+//                        != PackageManager.PERMISSION_GRANTED){
+//                    ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CALL_PHONE}, REQUEST_CALL);
+//                }else{
+//                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
+//                    callIntent.setData(Uri.parse("tel:" + phone));
+//                    startActivity(callIntent);
+//                }
+//                break;
+//
+//            case "message":
+//                Intent intent = new Intent(Intent.ACTION_VIEW);
+//                intent.setData(Uri.parse("sms:"+ phone));
+//                startActivity(intent);
+//                break;
+//        }
+//    }
 
-            case "message":
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("sms:"+ phone));
-                startActivity(intent);
-                break;
-        }
-    }
-
-    @Override
-    public void haveNotPhone() {
-        showMessage("Thông báo", "Có lỗi xảy ra!", SweetAlertDialog.WARNING_TYPE);
-    }
+//    @Override
+//    public void haveNotPhone() {
+//        showMessage("Thông báo", "Có lỗi xảy ra!", SweetAlertDialog.WARNING_TYPE);
+//    }
 
     @Override
     protected void onStop() {
