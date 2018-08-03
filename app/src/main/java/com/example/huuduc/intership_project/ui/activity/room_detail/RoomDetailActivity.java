@@ -26,8 +26,11 @@ import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.example.huuduc.intership_project.R;
 import com.example.huuduc.intership_project.data.model.Comment;
 import com.example.huuduc.intership_project.data.model.Room;
+import com.example.huuduc.intership_project.ui.activity.edit_room.EditRoomActivity;
 import com.example.huuduc.intership_project.ui.adapter.CommentAdapter;
 import com.example.huuduc.intership_project.ui.base.BaseActivity;
+import com.example.huuduc.intership_project.utils.Constant;
+import com.example.huuduc.intership_project.utils.DatabaseService;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 
 import java.text.DecimalFormat;
@@ -147,6 +150,13 @@ public class RoomDetailActivity extends BaseActivity implements IRoomDetailView 
     @OnClick({R.id.yourRating, R.id.btnRating, R.id.ivCall, R.id.ivMessage})
     void onClick(View view){
         switch (view.getId()){
+
+            case R.id.btnEdit:
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(Constant.ROOM_BUNDLE, room);
+                this.goNextScreen(EditRoomActivity.class, bundle);
+                break;
+
             case R.id.yourRating:
                 mPresenter.putDataRating(room.getId(), yourRating.getRating());
                 yourRating.setIndicator(true);
@@ -203,6 +213,9 @@ public class RoomDetailActivity extends BaseActivity implements IRoomDetailView 
         rating.setRating(Float.valueOf(room.getRating()));
         rating.setIndicator(true);
 
+        if (room.getUser_id().equalsIgnoreCase(DatabaseService.getUserID())){
+            btnEdit.setVisibility(View.VISIBLE);
+        }
         tvAddress.setText(room.getAddress()+", "+room.getWard()+", "+room.getDistrict());
         tvArea.setText(room.getArea() + "m2");
         tvRoomEmpty.setText("Số phòng trống: " + room.getRoom_empty());

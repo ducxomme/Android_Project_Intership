@@ -44,19 +44,19 @@ public class DistrictHelper {
     }
 
     public static void pushRoomtoWard (String roomId, DistrictResponse district, WardResponse ward){
-        mDistrict.child(roomId).runTransaction(new Transaction.Handler() {
+        mDistrict.child(String.valueOf(district.getDistrictid())).runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
 
-                mDistrict.child(roomId).child("id").setValue(String.valueOf(district.getDistrictid()));
-                mDistrict.child(roomId).child("name").setValue(district.toString());
+                mDistrict.child(String.valueOf(district.getDistrictid())).child("id").setValue(String.valueOf(district.getDistrictid()));
+                mDistrict.child(String.valueOf(district.getDistrictid())).child("name").setValue(district.toString());
 
                 Map<String, String> mapRoom = new HashMap<>();
                 mapRoom.put(roomId, roomId);
 
-                mDistrict.child(roomId).child("ward").child(String.valueOf(ward.getWardid())).child("id").setValue(String.valueOf(ward.getWardid()));
-                mDistrict.child(roomId).child("ward").child(String.valueOf(ward.getWardid())).child("name").setValue(ward.toString());
-                mDistrict.child(roomId).child("ward").child(String.valueOf(ward.getWardid())).child("room").setValue(mapRoom);
+                mDistrict.child(String.valueOf(district.getDistrictid())).child("ward").child(String.valueOf(ward.getWardid())).child("id").setValue(String.valueOf(ward.getWardid()));
+                mDistrict.child(String.valueOf(district.getDistrictid())).child("ward").child(String.valueOf(ward.getWardid())).child("name").setValue(ward.toString());
+                mDistrict.child(String.valueOf(district.getDistrictid())).child("ward").child(String.valueOf(ward.getWardid())).child("room").setValue(mapRoom);
 
 
                 return Transaction.success(mutableData);

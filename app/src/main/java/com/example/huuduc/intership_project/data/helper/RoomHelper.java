@@ -207,8 +207,8 @@ public class RoomHelper {
                             listRoomByPriceAndAddress.add(room);
                         }
                     }
-                    roomListListener.OnSuccess(listRoomByPriceAndAddress);
                 }
+                roomListListener.OnSuccess(listRoomByPriceAndAddress);
             }
 
             @Override

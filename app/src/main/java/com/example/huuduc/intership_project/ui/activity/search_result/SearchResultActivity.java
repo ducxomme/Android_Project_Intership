@@ -67,9 +67,8 @@ public class SearchResultActivity extends BaseActivity implements ISearchView {
 
         listRoomSearch.addAll(listRoomSearchResult);
         mAdapter.notifyDataSetChanged();
-        if (listRoomSearch.size() == 0){
+        if (listRoomSearchResult.size() == 0){
             showMessage("Kết quả", "Không có kết quả phù hợp", SweetAlertDialog.SUCCESS_TYPE);
-//            finish();
         }
     }
 }

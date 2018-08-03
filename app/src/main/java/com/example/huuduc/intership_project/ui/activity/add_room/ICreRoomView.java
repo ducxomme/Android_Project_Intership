@@ -11,4 +11,5 @@ public interface ICreRoomView extends BaseView {
     void showListDistrict(List<DistrictResponse> listDistrict);
     void showListWard(List<WardResponse> listWard);
     void pushRoomSuccess();
+
 }

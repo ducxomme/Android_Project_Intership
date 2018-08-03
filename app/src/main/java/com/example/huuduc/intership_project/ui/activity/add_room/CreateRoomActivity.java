@@ -4,10 +4,8 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,6 +22,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.huuduc.intership_project.R;
+import com.example.huuduc.intership_project.data.listener.ImageListener;
 import com.example.huuduc.intership_project.data.listener.OnItemClickListener;
 import com.example.huuduc.intership_project.data.model.Room;
 import com.example.huuduc.intership_project.data.network.model_response.DistrictResponse;
@@ -35,8 +34,6 @@ import com.example.huuduc.intership_project.ui.base.BaseActivity;
 import com.example.huuduc.intership_project.utils.Constant;
 import com.example.huuduc.intership_project.utils.DatabaseService;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,7 +46,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class CreateRoomActivity extends BaseActivity implements ICreRoomView{
+public class CreateRoomActivity extends BaseActivity implements ICreRoomView {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -99,13 +96,13 @@ public class CreateRoomActivity extends BaseActivity implements ICreRoomView{
 
 
     @OnClick({R.id.edDistrict, R.id.edWard, R.id.btnUpImage, R.id.btnUpRoom})
-    void onClick(View view){
-        switch (view.getId()){
+    void onClick(View view) {
+        switch (view.getId()) {
             case R.id.edDistrict:
                 mPresenter.getAllDistrict();
                 break;
             case R.id.edWard:
-                if (district != null){
+                if (district != null) {
                     mPresenter.getAllWard(district.getDistrictid());
                 }
                 break;
@@ -120,35 +117,54 @@ public class CreateRoomActivity extends BaseActivity implements ICreRoomView{
                 String phone = edPhone.getText().toString().trim();
                 String description = edDescription.getText().toString().trim();
                 if (TextUtils.isEmpty(roomPrice) ||
-                         TextUtils.isEmpty(roomArea) ||
-                         TextUtils.isEmpty(roomEmpty) ||
-                         TextUtils.isEmpty(roomAddress) ||
-                         TextUtils.isEmpty(phone) ||
-                         TextUtils.isEmpty(description)||
-                         district == null || ward == null ||
-                        listImage.size() == 0){
+                        TextUtils.isEmpty(roomArea) ||
+                        TextUtils.isEmpty(roomEmpty) ||
+                        TextUtils.isEmpty(roomAddress) ||
+                        TextUtils.isEmpty(phone) ||
+                        TextUtils.isEmpty(description) ||
+                        district == null || ward == null ||
+                        listImage.size() == 0) {
 
                     showMessage("Thông báo", "Bạn vui lòng nhập đủ thông tin", SweetAlertDialog.WARNING_TYPE);
-                }else{
-//                     get date public
-                    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-                    Date today = Calendar.getInstance().getTime();
+                } else {
+                    btnUpRoom.setEnabled(false);
+                    btnUpImage.setEnabled(false);
+                    showLoading("Đang đăng phòng");
+                    mPresenter.pushImageToStorage(listImage, new ImageListener() {
+                        @Override
+                        public void success(List<String> listImageUrl) {
+                            listImage.clear();
+                            listImage.addAll(listImageUrl);
 
-                    // Set gia tri de qua Presenter
-                    Room room = new Room();
-                    room.setAddress(roomAddress);
-                    room.setArea(Integer.valueOf(roomArea));
-                    room.setDate_public(df.format(today));
-                    room.setDescription(description);
-                    room.setDistrict(district.getType() + " " + district.getName());
-                    room.setImage(listImage.get(0));
-                    room.setPhone(phone);
-                    room.setPrice(Integer.valueOf(roomPrice));
-                    room.setRating("0");
-                    room.setRoom_empty(Integer.valueOf(roomEmpty));
-                    room.setUser_id(DatabaseService.getUserID());
-                    room.setWard(ward.getType() + " " + ward.getName());
-                    mPresenter.pushNewRoom(room, district, ward);
+                            //   get date public
+                            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                            Date today = Calendar.getInstance().getTime();
+
+                            // Set gia tri de qua Presenter
+                            Room room = new Room();
+                            room.setAddress(roomAddress);
+                            room.setArea(Integer.valueOf(roomArea));
+                            room.setDate_public(df.format(today));
+                            room.setDescription(description);
+                            room.setDistrict(district.getType() + " " + district.getName());
+                            room.setImage(listImage.get(0));
+                            room.setPhone(phone);
+                            room.setPrice(Integer.valueOf(roomPrice));
+                            room.setPublic(true);
+                            room.setRating("0");
+                            room.setRoom_empty(Integer.valueOf(roomEmpty));
+                            room.setUser_id(DatabaseService.getUserID());
+                            room.setWard(ward.getType() + " " + ward.getName());
+                            mPresenter.pushNewRoom(listImageUrl, room, district, ward);
+                        }
+
+                        @Override
+                        public void failed(String error) {
+                            showMessage("Thông báo", "Lỗi lưu ảnh lên CSDL", SweetAlertDialog.WARNING_TYPE);
+                        }
+                    });
+
+
                 }
                 break;
         }
@@ -158,28 +174,36 @@ public class CreateRoomActivity extends BaseActivity implements ICreRoomView{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK){
-            if (requestCode == Constant.REQUEST_CODE){
-                if (data.getParcelableExtra(Constant.DISTRICT) != null){
+        if (resultCode == RESULT_OK) {
+            if (requestCode == Constant.REQUEST_CODE) {
+                if (data.getParcelableExtra(Constant.DISTRICT) != null) {
                     district = data.getParcelableExtra(Constant.DISTRICT);
                     edDistrict.setText(district.toString());
                 }
-                if (data.getParcelableExtra(Constant.WARD) != null){
+                if (data.getParcelableExtra(Constant.WARD) != null) {
                     ward = data.getParcelableExtra(Constant.WARD);
                     edWard.setText(ward.toString());
                 }
-            }else if (requestCode == Constant.REQUEST_CAMERA){
-                Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-
-                File destination = new File(Environment.getExternalStorageDirectory(),
-                        System.currentTimeMillis() + ".jpg");
-                filePath = Uri.fromFile(destination);
-                listImage.add(filePath.toString());
-                mImageAdapter.notifyDataSetChanged();
-            }else if (requestCode == Constant.SELECT_FILE){
+            } else if (requestCode == Constant.REQUEST_CAMERA) {
                 filePath = data.getData();
+//                FirebaseStorage.getInstance().getReference().child("Photos/").child(filePath.getLastPathSegment())
+//                        .putFile(filePath)
+//                        .addOnSuccessListener(taskSnapshot -> {
+//                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+//                            Log.e("DownloadUrl", downloadUrl.toString());
+//                        });
+                listImage.add(filePath.toString());
+                Log.e("lisImage", listImage.toString());
+                mImageAdapter.notifyDataSetChanged();
+            } else if (requestCode == Constant.SELECT_FILE) {
+                filePath = data.getData();
+                Log.e("filePath", filePath.toString());
+//                FirebaseStorage.getInstance().getReference().child("Photos/").child(filePath.getLastPathSegment())
+//                        .putFile(filePath)
+//                        .addOnSuccessListener(taskSnapshot -> {
+//                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+//                            Log.e("DownloadUrl", downloadUrl.toString());
+//                        });
                 listImage.add(filePath.toString());
                 mImageAdapter.notifyDataSetChanged();
             }
@@ -203,9 +227,12 @@ public class CreateRoomActivity extends BaseActivity implements ICreRoomView{
             }
 
             @Override
-            public void onLikeClick(int pos) {}
+            public void onLikeClick(int pos) {
+            }
+
             @Override
-            public void roomClick(Room room) {}
+            public void roomClick(Room room) {
+            }
         });
 
         rvListImage.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -213,12 +240,12 @@ public class CreateRoomActivity extends BaseActivity implements ICreRoomView{
 
     }
 
-
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -229,7 +256,7 @@ public class CreateRoomActivity extends BaseActivity implements ICreRoomView{
     public void showListDistrict(List<DistrictResponse> listDistrict) {
         Log.e("listDistrict", listDistrict.size() + "");
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(Constant.LIST_DISTRICT_BUNDLE, (ArrayList)listDistrict);
+        bundle.putParcelableArrayList(Constant.LIST_DISTRICT_BUNDLE, (ArrayList) listDistrict);
         bundle.putParcelable(Constant.DISTRICT, district);
         this.goNextScreen(DistrictActivity.class, bundle, Constant.REQUEST_CODE);
     }
@@ -238,117 +265,71 @@ public class CreateRoomActivity extends BaseActivity implements ICreRoomView{
     public void showListWard(List<WardResponse> listWard) {
         Log.e("listWard", listWard.size() + "");
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(Constant.LIST_WARD_BUNDLE, (ArrayList)listWard);
+        bundle.putParcelableArrayList(Constant.LIST_WARD_BUNDLE, (ArrayList) listWard);
         bundle.putParcelable(Constant.WARD, ward);
         this.goNextScreen(WardActivity.class, bundle, Constant.REQUEST_CODE);
     }
 
     @Override
     public void pushRoomSuccess() {
+        hideLoading();
         showMessage("Thông báo", "Đăng phòng thành công", SweetAlertDialog.SUCCESS_TYPE);
+        finish();
     }
 
     public void handleImage() {
-        final CharSequence[] items = { "Take Photo", "Choose from Library",
-                "Cancel" };
+        final CharSequence[] items = {"Take Photo", "Choose from Library",
+                "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add Photo!");
-        final Boolean result = ContextCompat.checkSelfPermission( this, android.Manifest.permission.CAMERA )
+        final Boolean result = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED;
         Log.d("RESULT", result.toString());
 
         builder.setItems(items, (dialog, i) -> {
-            if (items[i].equals("Take Photo")){
+            if (items[i].equals("Take Photo")) {
                 userChoosenTask = "Take Photo";
                 if (checkCamPermission())
                     cameraIntent();
-            }else if (items[i].equals("Choose from Library")) {
-                userChoosenTask="Choose from Library";
+            } else if (items[i].equals("Choose from Library")) {
+                userChoosenTask = "Choose from Library";
                 if (checkGaleryPermission())
                     galleryIntent();
-            }else if (items[i].equals("Cancel")) {
+            } else if (items[i].equals("Cancel")) {
                 dialog.dismiss();
             }
         });
         builder.show();
     }
 
-    public Boolean checkCamPermission () {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA )
+    public Boolean checkCamPermission() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA},Constant.REQUEST_CAMERA);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, Constant.REQUEST_CAMERA);
             return false;
-        }else{
+        } else {
             return true;
         }
     }
 
-    private void cameraIntent()
-    {
+    private void cameraIntent() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, Constant.REQUEST_CAMERA);
     }
 
-//    private void onCaptureImageResult(Intent data) {
-//        Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-//        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-//        thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-//
-//        File destination = new File(Environment.getExternalStorageDirectory(),
-//                System.currentTimeMillis() + ".jpg");
-//        filePath = Uri.fromFile(destination);
-//
-//        FileOutputStream fo;
-//        try {
-//            destination.createNewFile();
-//            fo = new FileOutputStream(destination);
-//            fo.write(bytes.toByteArray());
-//            fo.close();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Log.d("FilePath_Capture", filePath.toString());
-//        listImage.add(filePath.toString());
-//        mImageAdapter.notifyDataSetChanged();
-////        uploadImageCaptureAndGetUrl(filePath);
-//
-//    }
-
-    private void galleryIntent()
-    {
+    private void galleryIntent() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select File"),Constant.SELECT_FILE);
+        startActivityForResult(Intent.createChooser(intent, "Select File"), Constant.SELECT_FILE);
     }
-//    @SuppressWarnings("deprecation")
-//    private void onSelectFromGalleryResult(Intent data) {
-//
-//        Bitmap bm=null;
-//        if (data != null) {
-//            filePath = data.getData();
-//            Log.d("FILE_PATH", filePath.toString());
-//            try {
-//                bm = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        listImage.add(filePath.toString());
-//        mImageAdapter.notifyDataSetChanged();
-////        uploadImageInGaleryAndGetUrl(filePath);
-////        imgAvatar_SignUp.setImageBitmap(bm);
-//    }
 
     public Boolean checkGaleryPermission() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, Constant.SELECT_FILE);
             return false;
-        }else {
+        } else {
             return true;
         }
     }
@@ -356,24 +337,22 @@ public class CreateRoomActivity extends BaseActivity implements ICreRoomView{
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
+        switch (requestCode) {
             case Constant.REQUEST_CAMERA:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                            == PackageManager.PERMISSION_GRANTED){
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                            == PackageManager.PERMISSION_GRANTED) {
 
                         cameraIntent();
                     }
-                }
-                else {
+                } else {
                     Toast.makeText(this, "Can't get camera because of permission denied", Toast.LENGTH_LONG).show();
                 }
                 break;
             case Constant.SELECT_FILE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     galleryIntent();
-                }
-                else {
+                } else {
                     Toast.makeText(this, "Can't get location because of permission denied", Toast.LENGTH_LONG).show();
                 }
                 break;

@@ -9,6 +9,7 @@ public class Room implements Serializable{
     public String district;
     public int area;
     public int price;
+    public Boolean isPublic;
     public String date_public;
     public String image;
     public String address;
@@ -21,13 +22,14 @@ public class Room implements Serializable{
     public Room() {
     }
 
-    public Room(String id, String user_id, String ward, String district, int area, int price, String date_public, String image, String address, int seen, int room_empty, String rating, String description, String phone) {
+    public Room(String id, String user_id, String ward, String district, int area, int price, Boolean isPublic, String date_public, String image, String address, int seen, int room_empty, String rating, String description, String phone) {
         this.id = id;
         this.user_id = user_id;
         this.ward = ward;
         this.district = district;
         this.area = area;
         this.price = price;
+        this.isPublic = isPublic;
         this.date_public = date_public;
         this.image = image;
         this.address = address;
@@ -84,6 +86,14 @@ public class Room implements Serializable{
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public Boolean getPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(Boolean aPublic) {
+        isPublic = aPublic;
     }
 
     public String getDate_public() {

@@ -1,9 +1,13 @@
 package com.example.huuduc.intership_project.ui.activity.add_room;
 
 import com.example.huuduc.intership_project.data.helper.DistrictHelper;
+import com.example.huuduc.intership_project.data.helper.ImageHelper;
 import com.example.huuduc.intership_project.data.helper.RatingHelper;
 import com.example.huuduc.intership_project.data.helper.RoomHelper;
+import com.example.huuduc.intership_project.data.helper.SaveImageHelper;
 import com.example.huuduc.intership_project.data.helper.UserHelper;
+import com.example.huuduc.intership_project.data.listener.CallBackListener;
+import com.example.huuduc.intership_project.data.listener.ImageListener;
 import com.example.huuduc.intership_project.data.listener.RatingListener;
 import com.example.huuduc.intership_project.data.listener.RoomListListener;
 import com.example.huuduc.intership_project.data.model.Rating;
@@ -15,6 +19,7 @@ import com.example.huuduc.intership_project.ui.base.BasePresenter;
 
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,7 +27,6 @@ import retrofit2.Response;
 public class CreRoomPresenter extends BasePresenter implements ICreRoomPrensenter{
 
     private ICreRoomView mView;
-    private String userChoosenTask;
 
     public CreRoomPresenter(ICreRoomView mView) {
         this.mView = mView;
@@ -75,7 +79,7 @@ public class CreRoomPresenter extends BasePresenter implements ICreRoomPrensente
     }
 
     @Override
-    public void pushNewRoom(Room room, DistrictResponse district, WardResponse ward) {
+    public void pushNewRoom(List<String> listUrl, Room room, DistrictResponse district, WardResponse ward) {
         mView.showLoading("Đang đăng phòng");
         RoomHelper.pushNewRoom(room, new RoomListListener() {
             @Override
@@ -86,9 +90,19 @@ public class CreRoomPresenter extends BasePresenter implements ICreRoomPrensente
                     public void OnSuccess(double rating) {
                         UserHelper.pushNewRoomForUser(listRoom.get(0).getId());
 
-                        DistrictHelper.pushRoomtoWard(room.getId(), district, ward);
-                        mView.hideLoading();
-                        mView.pushRoomSuccess();
+                        DistrictHelper.pushRoomtoWard(listRoom.get(0).getId(), district, ward);
+
+                        ImageHelper.saveListImage(listRoom.get(0).getId(), listUrl, new ImageListener() {
+                            @Override
+                            public void success(List<String> listImage) {
+                                mView.pushRoomSuccess();
+                            }
+
+                            @Override
+                            public void failed(String error) {
+                                mView.showMessage("Thông báo", "Lưu thông tin không thành công", SweetAlertDialog.ERROR_TYPE);
+                            }
+                        });
                     }
 
                     @Override
@@ -101,6 +115,21 @@ public class CreRoomPresenter extends BasePresenter implements ICreRoomPrensente
 
             @Override
             public void OnSuccess_RoomLike(List<String> listRoomLike) {}
+        });
+    }
+
+    @Override
+    public void pushImageToStorage(List<String> listImage, ImageListener listener) {
+        SaveImageHelper.pushImageToFirebase(listImage, new CallBackListener<String>() {
+            @Override
+            public void onSucess(List<String> objects) {
+                listener.success(objects);
+            }
+
+            @Override
+            public void onFailed(String message) {
+                listener.failed(message);
+            }
         });
     }
 

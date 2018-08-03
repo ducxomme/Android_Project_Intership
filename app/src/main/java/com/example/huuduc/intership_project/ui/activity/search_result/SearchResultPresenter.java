@@ -39,6 +39,7 @@ public class SearchResultPresenter implements ISearchResultPresenter {
                     public void OnSuccess_RoomLike(List<String> listRoomLike) {}
                 });
             } else {
+                // TODO : Kiem tra sao search co phong lai hien thong bao ko co ket qua
                 RoomHelper.filterRoomByPriceAndAddress(search.getPriceStart(), search.getPriceEnd(), search.getDistrict(), search.getWard(), new RoomListListener() {
                     @Override
                     public void OnSuccess(List<Room> listRoom) {
