@@ -85,6 +85,8 @@ public class CreateRoomActivity extends BaseActivity implements ICreRoomView {
     private Uri filePath = null;
 
 
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

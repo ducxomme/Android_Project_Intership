@@ -147,7 +147,7 @@ public class RoomDetailActivity extends BaseActivity implements IRoomDetailView 
         mPresenter.getAllImage(room.getId());
     }
 
-    @OnClick({R.id.yourRating, R.id.btnRating, R.id.ivCall, R.id.ivMessage})
+    @OnClick({R.id.btnEdit, R.id.yourRating, R.id.btnRating, R.id.ivCall, R.id.ivMessage})
     void onClick(View view){
         switch (view.getId()){
 

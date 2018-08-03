@@ -59,6 +59,7 @@
         <activity android:name=".ui.activity.ward.WardActivity">
 
         </activity>
+        <activity android:name=".ui.activity.edit_room.EditRoomActivity" />
     </application>
 
 </manifest>
