@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
@@ -191,6 +192,20 @@ public class RoomDetailActivity extends BaseActivity implements IRoomDetailView 
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case REQUEST_CALL:
+                if (grantResults.length > 0  && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                    callIntent.setData(Uri.parse("tel:" + room.getPhone()));
+                    startActivity(callIntent);
+                }
+                break;
+        }
+    }
+
+    @Override
     public void showListComment(List<Comment> listComment) {
         if (listComment != null){
             if (listComment.size() != 0){
@@ -226,7 +241,7 @@ public class RoomDetailActivity extends BaseActivity implements IRoomDetailView 
         DecimalFormat formatter = new DecimalFormat("###,###,###");
         tvPrice.setText(formatter.format(room.getPrice())+" VNĐ/phòng/tháng");
         tvSeen.setText(room.getSeen() + " người đã xem phòng này");
-        hideLoading();
+
     }
 
 
@@ -258,6 +273,7 @@ public class RoomDetailActivity extends BaseActivity implements IRoomDetailView 
 
             slider.addOnPageChangeListener(this);
         }
+        hideLoading();
     }
 
 //    @Override

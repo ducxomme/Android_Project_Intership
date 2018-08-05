@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import com.example.huuduc.intership_project.R;
 import com.example.huuduc.intership_project.data.model.Room;
@@ -64,7 +65,7 @@ public class SearchResultActivity extends BaseActivity implements ISearchView {
     @Override
     public void updateListRoomSearch(List<Room> listRoomSearchResult) {
         listRoomSearch.clear();
-
+        Log.e("Room size search", listRoomSearchResult.size() + "");
         listRoomSearch.addAll(listRoomSearchResult);
         mAdapter.notifyDataSetChanged();
         if (listRoomSearchResult.size() == 0){

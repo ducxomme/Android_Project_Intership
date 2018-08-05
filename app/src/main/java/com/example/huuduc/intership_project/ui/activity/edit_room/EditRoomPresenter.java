@@ -59,6 +59,26 @@ public class EditRoomPresenter extends BasePresenter implements IEditRoomPresent
     }
 
     @Override
+    public DistrictResponse getDistrict(Room room) {
+        DistrictResponse districtResponse = new DistrictResponse();
+        districtResponse.setDistrictid(Integer.valueOf(room.getDistrictId()));
+        String[] parts = room.getDistrict().split(" ", 2);
+        districtResponse.setType(parts[0]);
+        districtResponse.setName(parts[1]);
+        return districtResponse;
+    }
+
+    @Override
+    public WardResponse getWard(Room room) {
+        WardResponse wardResponse = new WardResponse();
+        wardResponse.setWardid(Integer.valueOf(room.getWardId()));
+        String[] parts = room.getWard().split(" ", 2);
+        wardResponse.setType(parts[0]);
+        wardResponse.setName(parts[1]);
+        return wardResponse;
+    }
+
+    @Override
     public void getAllDistrict() {
         mView.showLoading("Đang tải");
         mApiService.getAllDistrict(79).enqueue(new Callback<EndPoint<List<DistrictResponse>>>() {
@@ -106,33 +126,20 @@ public class EditRoomPresenter extends BasePresenter implements IEditRoomPresent
 
     @Override
     public void pushNewRoom(List<String> listUrl, Room room, DistrictResponse district, WardResponse ward) {
-        mView.showLoading("Đang đăng phòng");
+        mView.showLoading("Đang lưu thông tin");
         RoomHelper.pushNewRoom(room, new RoomListListener() {
             @Override
             public void OnSuccess(List<Room> listRoom) {
-                Rating rating = new Rating("0", "0", "0", "0", "0");
-                RatingHelper.pushNewRating(listRoom.get(0).getId(), rating, new RatingListener() {
+                ImageHelper.saveListImage(room.getId(), listUrl, new ImageListener() {
                     @Override
-                    public void OnSuccess(double rating) {
-                        UserHelper.pushNewRoomForUser(listRoom.get(0).getId());
-
-                        DistrictHelper.pushRoomtoWard(listRoom.get(0).getId(), district, ward);
-
-                        ImageHelper.saveListImage(listRoom.get(0).getId(), listUrl, new ImageListener() {
-                            @Override
-                            public void success(List<String> listImage) {
-                                mView.pushRoomSuccess();
-                            }
-
-                            @Override
-                            public void failed(String error) {
-                                mView.showMessage("Thông báo", "Lưu thông tin không thành công", SweetAlertDialog.ERROR_TYPE);
-                            }
-                        });
+                    public void success(List<String> listImage) {
+                        mView.pushRoomSuccess();
                     }
 
                     @Override
-                    public void CallBackRatingGet(Rating rating) {}
+                    public void failed(String error) {
+                        mView.showMessage("Thông báo", "Lưu thông tin không thành công", SweetAlertDialog.ERROR_TYPE);
+                    }
                 });
             }
 

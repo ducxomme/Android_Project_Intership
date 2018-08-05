@@ -1,5 +1,6 @@
 package com.example.huuduc.intership_project.data.helper;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.example.huuduc.intership_project.data.listener.RoomListListener;
@@ -57,14 +58,16 @@ public class RoomHelper {
             public void OnSuccess_RoomLike(List<String> listRoomLike) {
                 final List<Room> listLikedRoom = new ArrayList<>();
                 for (int i = 0; i < listRoomLike.size(); i++) {
+                    int finalI = i;
                     mRoomRef.child(listRoomLike.get(i)).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Room room = dataSnapshot.getValue(Room.class);
                             Log.e("RoomID : onDataChange", room.getId());
-                            listLikedRoom.add(room);
+                            if (room.getPublic())
+                                listLikedRoom.add(room);
                             Log.e("listLikedRoom.size", listLikedRoom.size() + "");
-                            if (listLikedRoom.size() == listRoomLike.size()) {
+                            if (finalI == listRoomLike.size() - 1) {
                                 Log.e("in If", listLikedRoom.size() + "");
                                 roomListListener.OnSuccess(listLikedRoom);
                             }
@@ -121,18 +124,15 @@ public class RoomHelper {
 
     public static void getAllBestSeenRoom(final RoomListListener roomListListener) {
 
-        Log.e("RoomHelper", "inside");
         mRoomRef.orderByChild("seen").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Room> lisBestSeenRoom = new ArrayList<>();
-                Log.e("RoomHelper", "onDataChange");
-                Log.e("RoomHelper", "onDataChange: " + dataSnapshot.getChildrenCount());
                 lisBestSeenRoom.clear();
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     Room room = data.getValue(Room.class);
-                    Log.e("room", room.getId() + "");
-                    lisBestSeenRoom.add(room);
+                    if (room.getPublic())
+                        lisBestSeenRoom.add(room);
                 }
                 Collections.reverse(lisBestSeenRoom);
                 roomListListener.OnSuccess(lisBestSeenRoom);
@@ -141,7 +141,6 @@ public class RoomHelper {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
-                Log.e("RoomHelper", "onCancelled");
                 roomListListener.OnFailed(databaseError.getMessage());
             }
         });
@@ -156,7 +155,8 @@ public class RoomHelper {
                 listBestRatingRoom.clear();
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     Room room = data.getValue(Room.class);
-                    listBestRatingRoom.add(room);
+                    if (room.getPublic())
+                        listBestRatingRoom.add(room);
                 }
                 Collections.reverse(listBestRatingRoom);
                 roomListListener.OnSuccess(listBestRatingRoom);
@@ -197,6 +197,7 @@ public class RoomHelper {
                 listRoomByPriceAndAddress.clear();
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     Room room = data.getValue(Room.class);
+                    Log.e("room. filter", room.getId());
                     if (ward == null){
                         if (room.getDistrict().equalsIgnoreCase(district.getName())) {
                             listRoomByPriceAndAddress.add(room);
@@ -213,7 +214,7 @@ public class RoomHelper {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                roomListListener.OnFailed(databaseError.getMessage());
             }
         });
 
@@ -224,10 +225,11 @@ public class RoomHelper {
     }
 
     public static void pushNewRoom(Room room, RoomListListener listener){
-        String key = mRoomRef.push().getKey();
-        room.setId(key);
-
-        mRoomRef.child(key).setValue(room);
+        if (TextUtils.isEmpty(room.getId())){
+            String key = mRoomRef.push().getKey();
+            room.setId(key);
+        }
+        mRoomRef.child(room.getId()).setValue(room);
         List<Room> listNew = new ArrayList<>();
         listNew.add(room);
         listener.OnSuccess(listNew);

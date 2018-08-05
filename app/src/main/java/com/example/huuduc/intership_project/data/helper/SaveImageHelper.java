@@ -1,6 +1,7 @@
 package com.example.huuduc.intership_project.data.helper;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.example.huuduc.intership_project.data.listener.CallBackListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -18,7 +19,6 @@ public class SaveImageHelper {
 
         StorageReference ref;
         List<String> listUrl = new ArrayList<>();
-//        Uri[] uri = new Uri[listImage.size()];
         int i;
         for (i = 0; i < listImage.size(); i++){
             Uri uri = Uri.parse(listImage.get(i));
@@ -27,6 +27,7 @@ public class SaveImageHelper {
             ref.putFile(uri)
                     .addOnSuccessListener(taskSnapshot -> {
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        Log.e("url", downloadUrl.toString());
                         listUrl.add(downloadUrl.toString());
                         if ( finalI == listImage.size() - 1){
                             listener.onSucess(listUrl);

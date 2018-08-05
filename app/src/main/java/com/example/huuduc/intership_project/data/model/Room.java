@@ -6,7 +6,9 @@ public class Room implements Serializable{
     public String id;
     public String user_id;
     public String ward;
+    public String wardId;
     public String district;
+    public String districtId;
     public int area;
     public int price;
     public Boolean isPublic;
@@ -22,11 +24,13 @@ public class Room implements Serializable{
     public Room() {
     }
 
-    public Room(String id, String user_id, String ward, String district, int area, int price, Boolean isPublic, String date_public, String image, String address, int seen, int room_empty, String rating, String description, String phone) {
+    public Room(String id, String user_id, String ward, String wardId, String district, String districtId, int area, int price, Boolean isPublic, String date_public, String image, String address, int seen, int room_empty, String rating, String description, String phone) {
         this.id = id;
         this.user_id = user_id;
         this.ward = ward;
+        this.wardId = wardId;
         this.district = district;
+        this.districtId = districtId;
         this.area = area;
         this.price = price;
         this.isPublic = isPublic;
@@ -64,12 +68,28 @@ public class Room implements Serializable{
         this.ward = ward;
     }
 
+    public String getWardId() {
+        return wardId;
+    }
+
+    public void setWardId(String wardId) {
+        this.wardId = wardId;
+    }
+
     public String getDistrict() {
         return district;
     }
 
     public void setDistrict(String district) {
         this.district = district;
+    }
+
+    public String getDistrictId() {
+        return districtId;
+    }
+
+    public void setDistrictId(String districtId) {
+        this.districtId = districtId;
     }
 
     public int getArea() {

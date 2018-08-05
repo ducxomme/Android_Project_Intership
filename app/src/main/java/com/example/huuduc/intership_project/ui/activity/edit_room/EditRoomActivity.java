@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
@@ -23,8 +24,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.huuduc.intership_project.R;
+import com.example.huuduc.intership_project.data.helper.DistrictHelper;
+import com.example.huuduc.intership_project.data.listener.CallBackListener;
 import com.example.huuduc.intership_project.data.listener.ImageListener;
 import com.example.huuduc.intership_project.data.listener.OnItemClickListener;
+import com.example.huuduc.intership_project.data.model.District;
 import com.example.huuduc.intership_project.data.model.Room;
 import com.example.huuduc.intership_project.data.network.model_response.DistrictResponse;
 import com.example.huuduc.intership_project.data.network.model_response.WardResponse;
@@ -48,7 +52,7 @@ import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class EditRoomActivity extends BaseActivity implements IEditRoomView{
+public class EditRoomActivity extends BaseActivity implements IEditRoomView {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -90,12 +94,13 @@ public class EditRoomActivity extends BaseActivity implements IEditRoomView{
     private EditRoomPresenter mPresenter;
 
     private Room room;
+    private Boolean isDeleteImg = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_room);
-
+        hideKeyboard();
         ButterKnife.bind(this);
 
         setSupportActionBar(toolbar);
@@ -112,12 +117,13 @@ public class EditRoomActivity extends BaseActivity implements IEditRoomView{
         listImage = new ArrayList<>();
 
 
-
         mImageAdapter = new ImageAdapter(this, listImage, new OnItemClickListener() {
             @Override
             public void onClick(int pos) {
-                if (listImage.size() != 0)
+                if (listImage.size() != 0) {
                     listImage.remove(pos);
+                    isDeleteImg = true;
+                }
                 mImageAdapter.notifyItemRemoved(pos);
             }
 
@@ -134,6 +140,10 @@ public class EditRoomActivity extends BaseActivity implements IEditRoomView{
     }
 
     private void showRoomDetail(Room room) {
+        // check district and ward to set value
+        district = mPresenter.getDistrict(room);
+        ward = mPresenter.getWard(room);
+
         switchPublic.setChecked(room.getPublic());
         edPrice.setText(String.valueOf(room.getPrice()));
         edArea.setText(String.valueOf(room.getArea()));
@@ -144,12 +154,14 @@ public class EditRoomActivity extends BaseActivity implements IEditRoomView{
         edPhone.setText(room.getPhone());
         edDescription.setText(room.getDescription());
 
+        rvListImage.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rvListImage.setAdapter(mImageAdapter);
         mPresenter.getListImage(room.getId());
     }
 
     @OnCheckedChanged(R.id.switchPublic)
-    void onCheckChanged(CompoundButton button, boolean checked){
-         room.setPublic(switchPublic.isChecked());
+    void onCheckChanged(CompoundButton button, boolean checked) {
+        room.setPublic(switchPublic.isChecked());
     }
 
     @OnClick({R.id.edDistrict, R.id.edWard, R.id.btnUpImage, R.id.btnSaveChange})
@@ -187,41 +199,63 @@ public class EditRoomActivity extends BaseActivity implements IEditRoomView{
                     btnSaveChange.setEnabled(false);
                     btnUpImage.setEnabled(false);
                     showLoading("Đang lưu phòng");
-                    mPresenter.pushImageToStorage(listImage, new ImageListener() {
-                        @Override
-                        public void success(List<String> listImageUrl) {
-                            listImage.clear();
-                            listImage.addAll(listImageUrl);
+                    if (isDeleteImg) {
+                        mPresenter.pushImageToStorage(listImage, new ImageListener() {
+                            @Override
+                            public void success(List<String> listImageUrl) {
+                                listImage.clear();
+                                listImage.addAll(listImageUrl);
 
-                            //   get date public
-                            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-                            Date today = Calendar.getInstance().getTime();
+                                // Set gia tri de qua Presenter
+                                Room roomEdit = new Room();
+                                roomEdit.setId(room.getId());
+                                roomEdit.setSeen(room.getSeen());
+                                roomEdit.setAddress(roomAddress);
+                                roomEdit.setArea(Integer.valueOf(roomArea));
+                                roomEdit.setDate_public(room.getDate_public());
+                                roomEdit.setDescription(description);
+                                roomEdit.setDistrictId(String.valueOf(district.getDistrictid()));
+                                roomEdit.setDistrict(district.getType() + " " + district.getName());
+                                roomEdit.setImage(listImage.get(0));
+                                roomEdit.setPhone(phone);
+                                roomEdit.setPrice(Integer.valueOf(roomPrice));
+                                roomEdit.setPublic(room.getPublic());
+                                roomEdit.setRating(room.getRating());
+                                roomEdit.setRoom_empty(Integer.valueOf(roomEmpty));
+                                roomEdit.setUser_id(DatabaseService.getUserID());
+                                roomEdit.setWardId(String.valueOf(ward.getWardid()));
+                                roomEdit.setWard(ward.getType() + " " + ward.getName());
+                                mPresenter.pushNewRoom(listImage, roomEdit, district, ward);
+                            }
 
-                            // Set gia tri de qua Presenter
-                            Room room = new Room();
-                            room.setAddress(roomAddress);
-                            room.setArea(Integer.valueOf(roomArea));
-                            room.setDate_public(df.format(today));
-                            room.setDescription(description);
-                            room.setDistrict(district.getType() + " " + district.getName());
-                            room.setImage(listImage.get(0));
-                            room.setPhone(phone);
-                            room.setPrice(Integer.valueOf(roomPrice));
-                            room.setPublic(room.getPublic());
-                            room.setRating("0");
-                            room.setRoom_empty(Integer.valueOf(roomEmpty));
-                            room.setUser_id(DatabaseService.getUserID());
-                            room.setWard(ward.getType() + " " + ward.getName());
-                            mPresenter.pushNewRoom(listImageUrl, room, district, ward);
-                        }
-
-                        @Override
-                        public void failed(String error) {
-                            showMessage("Thông báo", "Lỗi lưu ảnh lên CSDL", SweetAlertDialog.WARNING_TYPE);
-                        }
-                    });
-
-
+                            @Override
+                            public void failed(String error) {
+                                showMessage("Thông báo", error, SweetAlertDialog.WARNING_TYPE);
+                                hideLoading();
+                            }
+                        });
+                    }else{
+                        // Set gia tri de qua Presenter
+                        Room roomEdit = new Room();
+                        roomEdit.setId(room.getId());
+                        roomEdit.setSeen(room.getSeen());
+                        roomEdit.setAddress(roomAddress);
+                        roomEdit.setArea(Integer.valueOf(roomArea));
+                        roomEdit.setDate_public(room.getDate_public());
+                        roomEdit.setDescription(description);
+                        roomEdit.setDistrictId(String.valueOf(district.getDistrictid()));
+                        roomEdit.setDistrict(district.getType() + " " + district.getName());
+                        roomEdit.setImage(listImage.get(0));
+                        roomEdit.setPhone(phone);
+                        roomEdit.setPrice(Integer.valueOf(roomPrice));
+                        roomEdit.setPublic(room.getPublic());
+                        roomEdit.setRating(room.getRating());
+                        roomEdit.setRoom_empty(Integer.valueOf(roomEmpty));
+                        roomEdit.setUser_id(DatabaseService.getUserID());
+                        roomEdit.setWardId(String.valueOf(ward.getWardid()));
+                        roomEdit.setWard(ward.getType() + " " + ward.getName());
+                        mPresenter.pushNewRoom(listImage, roomEdit, district, ward);
+                    }
                 }
                 break;
         }
@@ -229,7 +263,9 @@ public class EditRoomActivity extends BaseActivity implements IEditRoomView{
 
     @Override
     public void pushRoomSuccess() {
-
+        hideLoading();
+        showMessage("Thông báo", "Sửa phòng thành công", SweetAlertDialog.SUCCESS_TYPE);
+        finish();
     }
 
     @Override
@@ -248,6 +284,8 @@ public class EditRoomActivity extends BaseActivity implements IEditRoomView{
                 if (data.getParcelableExtra(Constant.DISTRICT) != null) {
                     district = data.getParcelableExtra(Constant.DISTRICT);
                     edDistrict.setText(district.toString());
+                    ward = null;
+                    edWard.setText("");
                 }
                 if (data.getParcelableExtra(Constant.WARD) != null) {
                     ward = data.getParcelableExtra(Constant.WARD);

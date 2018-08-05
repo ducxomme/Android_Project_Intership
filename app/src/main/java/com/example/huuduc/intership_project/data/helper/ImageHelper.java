@@ -38,6 +38,7 @@ public class ImageHelper {
     }
 
     public static void saveListImage (String roomId, List<String> listUrl, ImageListener listener) {
+        mImageRef.child(roomId).removeValue();
         mImageRef.child(roomId).runTransaction(new Transaction.Handler() {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {

@@ -2,6 +2,7 @@ package com.example.huuduc.intership_project.ui.activity.search_result;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.huuduc.intership_project.data.helper.RoomHelper;
 import com.example.huuduc.intership_project.data.listener.RoomListListener;
@@ -40,15 +41,16 @@ public class SearchResultPresenter implements ISearchResultPresenter {
                 });
             } else {
                 // TODO : Kiem tra sao search co phong lai hien thong bao ko co ket qua
-                RoomHelper.filterRoomByPriceAndAddress(search.getPriceStart(), search.getPriceEnd(), search.getDistrict(), search.getWard(), new RoomListListener() {
+                RoomHelper.filterRoomByPriceAndAddress(search.getPriceStart(), search.getPriceEnd(),
+                        search.getDistrict(), search.getWard(), new RoomListListener() {
                     @Override
                     public void OnSuccess(List<Room> listRoom) {
                         mView.updateListRoomSearch(listRoom);
                     }
-
                     @Override
-                    public void OnFailed(String error) {}
-
+                    public void OnFailed(String error) {
+                        Log.e("Errorm ", error);
+                    }
                     @Override
                     public void OnSuccess_RoomLike(List<String> listRoomLike) {}
                 });

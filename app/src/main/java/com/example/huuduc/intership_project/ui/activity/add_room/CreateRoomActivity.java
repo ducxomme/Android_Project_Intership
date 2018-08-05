@@ -148,6 +148,7 @@ public class CreateRoomActivity extends BaseActivity implements ICreRoomView {
                             room.setArea(Integer.valueOf(roomArea));
                             room.setDate_public(df.format(today));
                             room.setDescription(description);
+                            room.setDistrictId(String.valueOf(district.getDistrictid()));
                             room.setDistrict(district.getType() + " " + district.getName());
                             room.setImage(listImage.get(0));
                             room.setPhone(phone);
@@ -156,6 +157,7 @@ public class CreateRoomActivity extends BaseActivity implements ICreRoomView {
                             room.setRating("0");
                             room.setRoom_empty(Integer.valueOf(roomEmpty));
                             room.setUser_id(DatabaseService.getUserID());
+                            room.setWardId(String.valueOf(ward.getWardid()));
                             room.setWard(ward.getType() + " " + ward.getName());
                             mPresenter.pushNewRoom(listImageUrl, room, district, ward);
                         }
@@ -353,9 +355,12 @@ public class CreateRoomActivity extends BaseActivity implements ICreRoomView {
                 break;
             case Constant.SELECT_FILE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    galleryIntent();
+                    if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_GRANTED) {
+                        galleryIntent();
+                    }
                 } else {
-                    Toast.makeText(this, "Can't get location because of permission denied", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Can't get gallery because of permission denied", Toast.LENGTH_LONG).show();
                 }
                 break;
         }
