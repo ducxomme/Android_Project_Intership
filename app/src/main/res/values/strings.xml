@@ -3,7 +3,7 @@
 
     <string name="register"><u>Đăng kí</u></string>
     <string name="login">Đăng nhập</string>
-    <string name="username">Tên đăng nhập</string>
+    <string name="username">Tên người dùng</string>
     <string name="password">Mật khẩu</string>
     <string name="comfirm_password">Xác nhận mật khẩu</string>
     <string name="full_name">Họ và tên</string>
