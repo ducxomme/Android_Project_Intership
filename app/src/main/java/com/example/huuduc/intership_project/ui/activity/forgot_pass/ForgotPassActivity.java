@@ -38,6 +38,12 @@ public class ForgotPassActivity extends BaseActivity implements IForgotPassView{
     }
 
     @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
         finish();
