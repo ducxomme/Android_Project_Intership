@@ -21,8 +21,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
         <activity android:name=".ui.activity.main.MainActivity"></activity>
-        <activity android:name=".ui.activity.login.LoginActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize">
+        <activity android:name=".ui.activity.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

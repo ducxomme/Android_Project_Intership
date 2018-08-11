@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.huuduc.intership_project.data.helper.RoomHelper;
+import com.example.huuduc.intership_project.data.helper.UserHelper;
 import com.example.huuduc.intership_project.data.listener.RoomListListener;
 import com.example.huuduc.intership_project.data.model.Room;
 import com.example.huuduc.intership_project.data.model.Search;
@@ -40,7 +41,6 @@ public class SearchResultPresenter implements ISearchResultPresenter {
                     public void OnSuccess_RoomLike(List<String> listRoomLike) {}
                 });
             } else {
-                // TODO : Kiem tra sao search co phong lai hien thong bao ko co ket qua
                 RoomHelper.filterRoomByPriceAndAddress(search.getPriceStart(), search.getPriceEnd(),
                         search.getDistrict(), search.getWard(), new RoomListListener() {
                     @Override
@@ -57,5 +57,18 @@ public class SearchResultPresenter implements ISearchResultPresenter {
             }
 
         }
+    }
+
+    @Override
+    public void handleRomoveLike(List<Room> listRoomSearch, Room room) {
+        UserHelper.likeUnlikeRoom(room.getId());
+        RoomHelper.getAllLikedRoomByUser(new RoomListListener() {
+            @Override
+            public void OnSuccess(List<Room> listRoom) {}
+            @Override
+            public void OnFailed(String error) {}
+            @Override
+            public void OnSuccess_RoomLike(List<String> listRoomLike) {}
+        });
     }
 }

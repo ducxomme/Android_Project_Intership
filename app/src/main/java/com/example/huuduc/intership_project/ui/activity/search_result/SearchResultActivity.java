@@ -89,7 +89,8 @@ public class SearchResultActivity extends BaseActivity implements ISearchView {
 
             @Override
             public void onLikeClick(int pos) {
-
+                Room room = listRoomSearch.get(pos);
+                mPresenter.handleRomoveLike(listRoomSearch, room);
             }
 
             @Override
