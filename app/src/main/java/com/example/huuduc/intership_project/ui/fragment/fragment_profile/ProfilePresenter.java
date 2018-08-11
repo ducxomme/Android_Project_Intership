@@ -28,7 +28,7 @@ public class ProfilePresenter extends BasePresenter{
             @Override
             public void success(User user) {
                 mView.hideLoading();
-                Log.e("OnSuccess: UserGenger", user.getGender().toString());
+//                Log.e("OnSuccess: UserGenger", user.getGender().toString());
                 mView.getUserSuccess(user);
             }
 

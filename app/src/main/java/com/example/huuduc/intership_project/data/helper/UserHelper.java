@@ -69,7 +69,7 @@ public class UserHelper {
             @Override
             public Transaction.Result doTransaction(MutableData mutableData) {
 
-                mUserRef.child("name").setValue(newName);
+                mUserRef.child("username").setValue(newName);
                 mUserRef.child("gender").setValue(newGender);
                 mUserRef.child("phone").setValue(newPhone);
 

@@ -31,8 +31,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class ProfileFragment extends BaseFragment implements IProfileView{
+public class ProfileFragment extends BaseFragment implements IProfileView {
 
     @BindView(R.id.edtEmail)
     EditText edtEmail;
@@ -56,7 +57,7 @@ public class ProfileFragment extends BaseFragment implements IProfileView{
 
     private ProfilePresenter mPresenter;
 
-    public ProfileFragment(){
+    public ProfileFragment() {
 
     }
 
@@ -72,7 +73,7 @@ public class ProfileFragment extends BaseFragment implements IProfileView{
     @Override
     public void initializeLayout(View view) {
         mListMyRoom = new ArrayList<>();
-        mAdapter = new LikeAdapter(getContext(),mListMyRoom);
+        mAdapter = new LikeAdapter(getContext(), mListMyRoom);
         rvMyRoom.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         rvMyRoom.setAdapter(mAdapter);
 
@@ -81,8 +82,8 @@ public class ProfileFragment extends BaseFragment implements IProfileView{
     }
 
     @OnClick({R.id.btnUpdate, R.id.tvLogout})
-    void onClick(View view){
-        switch (view.getId()){
+    void onClick(View view) {
+        switch (view.getId()) {
             case R.id.btnUpdate:
                 String name = edtName.getText().toString().trim();
                 Boolean gender;
@@ -116,19 +117,17 @@ public class ProfileFragment extends BaseFragment implements IProfileView{
         edtEmail.setText(user.getEmail());
         edtEmail.setEnabled(false);
         edtName.setText(user.getUsername());
-        if (user.getPhone() == null){
+        if (user.getPhone() == null) {
             edtPhone.setText("");
-        }else{
+        } else {
             edtPhone.setText(user.getPhone());
         }
-        if (user.getGender() != null){
-            if (user.getGender()){
-                rbFemale.setChecked(false);
-                rbMale.setChecked(true);
-            }else{
-                rbMale.setChecked(false);
-                rbFemale.setChecked(true);
-            }
+        if (user.getGender()) {
+            rbFemale.setChecked(false);
+            rbMale.setChecked(true);
+        } else {
+            rbMale.setChecked(false);
+            rbFemale.setChecked(true);
         }
         RoomHelper.getAllMyRoom(new RoomListListener() {
             @Override
@@ -137,10 +136,14 @@ public class ProfileFragment extends BaseFragment implements IProfileView{
                 mListMyRoom.addAll(listRoom);
                 mAdapter.notifyDataSetChanged();
             }
+
             @Override
-            public void OnFailed(String error) {}
+            public void OnFailed(String error) {
+            }
+
             @Override
-            public void OnSuccess_RoomLike(List<String> listRoomLike) {}
+            public void OnSuccess_RoomLike(List<String> listRoomLike) {
+            }
         });
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -150,7 +153,7 @@ public class ProfileFragment extends BaseFragment implements IProfileView{
                 RoomHelper.plusRoomSeen(room.getId(), room.getSeen() + 1);
                 Intent intent = new Intent(getActivity(), RoomDetailActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(Constant.ROOM_BUNDLE,  room);
+                bundle.putSerializable(Constant.ROOM_BUNDLE, room);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -176,10 +179,15 @@ public class ProfileFragment extends BaseFragment implements IProfileView{
     @Override
     public void updateNewInfo(String name, Boolean gender, String phone) {
         edtName.setText(name);
-        if (gender)
+        if (gender) {
+            rbFemale.setChecked(false);
+            rbMale.setChecked(true);
+        } else {
+            rbMale.setChecked(false);
             rbFemale.setChecked(true);
-        else rbMale.setChecked(true);
+        }
         edtPhone.setText(phone);
+        showMessage("Thông báo", "Cập nhập thông tin thành công", SweetAlertDialog.SUCCESS_TYPE);
     }
 
 }

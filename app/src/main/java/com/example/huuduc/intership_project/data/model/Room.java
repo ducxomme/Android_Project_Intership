@@ -11,7 +11,7 @@ public class Room implements Serializable{
     public String districtId;
     public int area;
     public int price;
-    public Boolean isPublic;
+    public boolean isPublic;
     public String date_public;
     public String image;
     public String address;

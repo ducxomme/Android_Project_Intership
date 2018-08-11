@@ -6,7 +6,7 @@ public class User {
     private String username;
     private String email;
     private String id;
-    private Boolean gender;
+    private boolean gender;
     private HashMap<String, String> like;
     private HashMap<String, String> rooms;
     private String phone;
@@ -14,7 +14,7 @@ public class User {
     public User() {
     }
 
-    public User(String username, String email, String id, Boolean gender, HashMap<String, String> like, HashMap<String, String> rooms, String phone) {
+    public User(String username, String email, String id, boolean gender, HashMap<String, String> like, HashMap<String, String> rooms, String phone) {
         this.username = username;
         this.email = email;
         this.id = id;
@@ -48,11 +48,11 @@ public class User {
         this.id = id;
     }
 
-    public Boolean getGender() {
+    public boolean getGender() {
         return gender;
     }
 
-    public void setGender(Boolean gender) {
+    public void setGender(boolean gender) {
         this.gender = gender;
     }
 

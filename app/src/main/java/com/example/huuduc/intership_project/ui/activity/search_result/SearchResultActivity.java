@@ -8,9 +8,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import com.example.huuduc.intership_project.R;
+import com.example.huuduc.intership_project.data.helper.RoomHelper;
+import com.example.huuduc.intership_project.data.listener.OnItemClickListener;
 import com.example.huuduc.intership_project.data.model.Room;
+import com.example.huuduc.intership_project.ui.activity.room_detail.RoomDetailActivity;
 import com.example.huuduc.intership_project.ui.adapter.LikeAdapter;
 import com.example.huuduc.intership_project.ui.base.BaseActivity;
+import com.example.huuduc.intership_project.utils.Constant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,5 +75,27 @@ public class SearchResultActivity extends BaseActivity implements ISearchView {
         if (listRoomSearchResult.size() == 0){
             showMessage("Kết quả", "Không có kết quả phù hợp", SweetAlertDialog.SUCCESS_TYPE);
         }
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onClick(int pos) {
+                Room room = listRoomSearch.get(pos);
+
+                Bundle bundle = new Bundle();
+                room.setSeen(room.getSeen() + 1);
+                bundle.putSerializable(Constant.ROOM_BUNDLE, room);
+                RoomHelper.plusRoomSeen(room.getId(), room.getSeen() + 1);
+                goNextScreen(RoomDetailActivity.class, bundle);
+            }
+
+            @Override
+            public void onLikeClick(int pos) {
+
+            }
+
+            @Override
+            public void roomClick(Room room) {
+
+            }
+        });
     }
 }
