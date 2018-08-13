@@ -10,6 +10,8 @@ import com.example.huuduc.intership_project.data.model.Room;
 
 import java.util.List;
 
+import cn.pedant.SweetAlert.SweetAlertDialog;
+
 public class LikePresenter implements ILikePresenter {
     private ILikeView mView;
     private Context context;
@@ -25,9 +27,14 @@ public class LikePresenter implements ILikePresenter {
         RoomHelper.getAllLikedRoomByUser(new RoomListListener() {
             @Override
             public void OnSuccess(List<Room> listRoom) {
-                mView.hideLoading();
-                Log.e("OnSuccess: RoomID", listRoom.size()+"");
-                mView.getAllLikedRoom(listRoom);
+                if (listRoom == null){
+                    mView.hideLoading();
+                    mView.showMessage("Thông báo", "Không có phòng yêu thích", SweetAlertDialog.SUCCESS_TYPE);
+                }else {
+                    mView.hideLoading();
+                    Log.e("OnSuccess: RoomID", listRoom.size() + "");
+                    mView.getAllLikedRoom(listRoom);
+                }
             }
 
             @Override

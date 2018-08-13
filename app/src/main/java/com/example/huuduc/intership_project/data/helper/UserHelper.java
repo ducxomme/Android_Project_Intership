@@ -7,6 +7,7 @@ import com.example.huuduc.intership_project.data.listener.UserListener;
 import com.example.huuduc.intership_project.data.model.User;
 import com.example.huuduc.intership_project.utils.Constant;
 import com.example.huuduc.intership_project.utils.DatabaseService;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -116,6 +117,9 @@ public class UserHelper {
     }
 
     public static void getAllUserInfo(final UserListener userListener) {
+        if (DatabaseService.getUserID() == null){
+            mUserRef = mUserRef.child(FirebaseAuth.getInstance().getCurrentUser().toString());
+        }
         mUserRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

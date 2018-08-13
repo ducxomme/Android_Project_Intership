@@ -56,6 +56,9 @@ public class RoomHelper {
 
             @Override
             public void OnSuccess_RoomLike(List<String> listRoomLike) {
+                if (listRoomLike.size() == 0){
+                    roomListListener.OnSuccess(null);
+                }
                 final List<Room> listLikedRoom = new ArrayList<>();
                 for (int i = 0; i < listRoomLike.size(); i++) {
                     int finalI = i;
@@ -63,10 +66,8 @@ public class RoomHelper {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Room room = dataSnapshot.getValue(Room.class);
-                            Log.e("RoomID : onDataChange", room.getId());
                             if (room.getPublic())
                                 listLikedRoom.add(room);
-                            Log.e("listLikedRoom.size", listLikedRoom.size() + "");
                             if (finalI == listRoomLike.size() - 1) {
                                 Log.e("in If", listLikedRoom.size() + "");
                                 roomListListener.OnSuccess(listLikedRoom);
@@ -79,8 +80,6 @@ public class RoomHelper {
                         }
                     });
                 }
-//                Log.e("outsidelistLikedRoom", listLikedRoom.size()+"");
-//                roomListListener.OnSuccess(listLikedRoom);
             }
         });
     }
@@ -88,12 +87,10 @@ public class RoomHelper {
     public static void getAllMyRoom(final RoomListListener roomListListener) {
         UserHelper.getAllMyRoomID(new RoomListListener() {
             @Override
-            public void OnSuccess(List<Room> listRoom) {
-            }
+            public void OnSuccess(List<Room> listRoom) {}
 
             @Override
-            public void OnFailed(String error) {
-            }
+            public void OnFailed(String error) {}
 
             @Override
             public void OnSuccess_RoomLike(List<String> listRoomLike) {
@@ -103,9 +100,7 @@ public class RoomHelper {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             Room room = dataSnapshot.getValue(Room.class);
-                            Log.e("RoomID : onDataChange", room.getId());
                             myRooms.add(room);
-                            Log.e("listLikedRoom.size", myRooms.size() + "");
                             if (myRooms.size() == listRoomLike.size()) {
                                 Log.e("in If", myRooms.size() + "");
                                 roomListListener.OnSuccess(myRooms);
@@ -197,7 +192,6 @@ public class RoomHelper {
                 listRoomByPriceAndAddress.clear();
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     Room room = data.getValue(Room.class);
-                    Log.e("room. filter", room.getId());
                     if (ward == null){
                         if (room.getDistrict().equalsIgnoreCase(district.getName())) {
                             listRoomByPriceAndAddress.add(room);

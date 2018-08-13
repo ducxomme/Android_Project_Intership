@@ -15,7 +15,7 @@ public class DatabaseService {
     private static DatabaseReference mUserReference;
     private static HashMap<String, String> profileImage = new HashMap<>();
 
-    protected DatabaseService()
+    public DatabaseService()
     {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();

@@ -28,14 +28,13 @@ public class RegisterPresenter extends BasePresenter implements IRegisterPresent
     public void handleRegister(final String email, final String username, final String password) {
 
         iRegisterView.showLoading("Loading...");
-        mDatabase.getFirebaseAuth().createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    User user = new User(username, email, task.getResult().getUser().getUid(), true, null, null, "");
-                    addNewUserFirebase(user);
-                }
+        mDatabase.getFirebaseAuth().createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                User user = new User(username, email, task.getResult().getUser().getUid(), true, null, null, "");
+                addNewUserFirebase(user);
             }
+        }).addOnFailureListener(e -> {
+            iRegisterView.hideLoading(e.getMessage(), false);
         });
     }
 
@@ -50,7 +49,7 @@ public class RegisterPresenter extends BasePresenter implements IRegisterPresent
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                iRegisterView.hideLoading("Sign up failed", false);
             }
         });
     }

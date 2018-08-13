@@ -27,6 +27,14 @@ public class LoginPresenter extends BasePresenter implements ILoginPresenter{
         mDatabase.getFirebaseAuth().signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+
+                if (task == null){
+                    return;
+                }
+                if (!task.isSuccessful()){
+                    iLoginView.loginFailed(task.getException().getMessage());
+                    return;
+                }
                 iLoginView.loginSuccess();
             }
         }).addOnFailureListener(new OnFailureListener() {
