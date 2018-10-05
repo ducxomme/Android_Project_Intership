@@ -52,8 +52,8 @@ public class FillterActivity extends BaseActivity implements IFillterView {
 
     private District district = null;
     private Ward ward = null;
-    private int priceStart = 1000000;
-    private int priceEnd = 5000000;
+    private int priceStart = Constant.PRICE_START;
+    private int priceEnd = Constant.PRICE_END;
 
 
     @Override
@@ -77,38 +77,7 @@ public class FillterActivity extends BaseActivity implements IFillterView {
     }
 
     private void init() {
-        // set init value for slider price
-        sliderPrice.getThumb(0).setValue(1);
-        sliderPrice.getThumb(1).setValue(9);
-        // set min max value for slider price
-        sliderPrice.setMin(1);
-        sliderPrice.setMax(19);
-
-        DecimalFormat formatter = new DecimalFormat("###,###,###");
-
-        tvStartPrice.setText(String.valueOf(
-                formatter.format(((float) (sliderPrice.getThumb(0).getValue()) / 2 + 0.5) * 1000000
-                )) + "VNĐ - ");
-
-        tvEndPrice.setText(String.valueOf(
-                formatter.format(((float) (sliderPrice.getThumb(1).getValue()) / 2 + 0.5) * 1000000
-                )) + "VNĐ");
-
-        sliderPrice.setOnThumbValueChangeListener((multiSlider, thumb, thumbIndex, value) -> {
-            if (thumbIndex == 0) {
-                priceStart = (int) (((float) (value) / 2 + 0.5) * 1000000);
-                Log.e("start", priceStart + "");
-                tvStartPrice.setText(String.valueOf(
-                        formatter.format(((float) (value) / 2 + 0.5) * 1000000)) + "VNĐ - ");
-            } else {
-                priceEnd = (int) (((float) (value) / 2 + 0.5) * 1000000);
-                Log.e("end", priceEnd + "");
-                tvEndPrice.setText(String.valueOf(
-                        formatter.format(((float) (value) / 2 + 0.5) * 1000000)) + "VNĐ");
-            }
-
-        });
-
+        setValueForSlider();
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -127,13 +96,51 @@ public class FillterActivity extends BaseActivity implements IFillterView {
             ward = mWards.get(position);
         });
 
-
         rvDistrict.setLayoutManager(new GridLayoutManager(this, 3));
         rvDistrict.setAdapter(mDistrictAdapter);
 
         rvWard.setLayoutManager(new GridLayoutManager(this, 3));
         rvWard.setAdapter(mWardAdapter);
+    }
 
+    private void setValueForSlider() {
+        int minSlider = 1;
+        int maxSlider = 19;
+        int currentSlider = 9;
+        // set init value for slider price
+
+        sliderPrice.getThumb(0).setValue(minSlider);
+        sliderPrice.getThumb(1).setValue(currentSlider);
+        // set min max value for slider price
+        sliderPrice.setMin(minSlider);
+        sliderPrice.setMax(maxSlider);
+
+        DecimalFormat formatter = new DecimalFormat("###,###,###");
+
+        float startPrice = (float) (((sliderPrice.getThumb(0).getValue()) / 2 + 0.5) * Constant.PRICE_START);
+        float endPrice = (float) (((sliderPrice.getThumb(1).getValue()) / 2 + 0.5) * Constant.PRICE_START);
+
+        String startPriceText = String.valueOf(formatter.format(startPrice)) + getString(R.string.priceStart);
+        tvStartPrice.setText(startPriceText);
+
+        String endPriceText = String.valueOf(formatter.format(endPrice)) + getString(R.string.priceEnd);
+        tvEndPrice.setText(endPriceText);
+
+        sliderPrice.setOnThumbValueChangeListener((multiSlider, thumb, thumbIndex, value) -> {
+            if (thumbIndex == 0) {
+                priceStart = (int) (((float) (value) / 2 + 0.5) * Constant.PRICE_START);
+                Log.e("start", priceStart + "");
+                String startString = String.valueOf(
+                        formatter.format(((float) (value) / 2 + 0.5) * Constant.PRICE_START)) + getString(R.string.priceStart);
+                tvStartPrice.setText(startString);
+            } else {
+                priceEnd = (int) (((float) (value) / 2 + 0.5) * Constant.PRICE_START);
+                Log.e("end", priceEnd + "");
+                String endString = String.valueOf(
+                        formatter.format(((float) (value) / 2 + 0.5) * Constant.PRICE_START)) + getString(R.string.priceEnd);
+                tvEndPrice.setText(endString);
+            }
+        });
     }
 
     @OnClick(R.id.btnFilter)
@@ -141,7 +148,6 @@ public class FillterActivity extends BaseActivity implements IFillterView {
         switch (view.getId()) {
             case R.id.btnFilter:
                 Search search = new Search(district, ward, priceStart, priceEnd);
-//                mPresenter.handleFilter(district, ward, priceStart, priceEnd);
 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(Constant.SEARCH_OBJ, search);
@@ -150,7 +156,6 @@ public class FillterActivity extends BaseActivity implements IFillterView {
                 break;
         }
     }
-
 
     @Override
     public void updateRecycleViewDistrict(List<District> objects) {
@@ -165,11 +170,4 @@ public class FillterActivity extends BaseActivity implements IFillterView {
         mWards.addAll(wards);
         mWardAdapter.notifyDataSetChanged();
     }
-
-//    @Override
-//    public void startListRoomActivity(List<Room> listRoom) {
-//        listRoomFilter.clear();
-//        listRoomFilter.addAll(listRoom);
-//        Log.e("listRoomFilter " , listRoomFilter.size() + "");
-//    }
 }

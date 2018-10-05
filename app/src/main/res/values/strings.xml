@@ -40,5 +40,16 @@ tấc cả nhà đều nằm ngay trung tâm, các trường cao đẳng công t
 tấc cả nhà trên đều nằm ở những con đường huyết mạch, dân cư đông đúc phù hợp kinh doanh tấc cả các nghành nghề,
     </string>
 
+    <!--SearchResultActivity-->
+    <string name="result">"Kết quả"</string>
+    <string name="no_result">"Không có kết quả phù hợp"</string>
 
+    <!--FilterActivity-->
+    <string name="priceStart">"VNĐ - "</string>
+    <string name="priceEnd">"VNĐ"</string>
+
+    <!--ProfileFragment-->
+    <string name="exiting">"Đang thoát"</string>
+    <string name="noti">"Thông báo"</string>
+    <string name="update_success">"Cập nhập thông tin thành công"</string>
 </resources>

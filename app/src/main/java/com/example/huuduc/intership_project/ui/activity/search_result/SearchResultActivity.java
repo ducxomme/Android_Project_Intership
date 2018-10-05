@@ -51,7 +51,7 @@ public class SearchResultActivity extends BaseActivity implements ISearchView {
         rvSearchResult.setAdapter(mAdapter);
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Kết quả");
+        getSupportActionBar().setTitle(getString(R.string.result));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
@@ -69,11 +69,10 @@ public class SearchResultActivity extends BaseActivity implements ISearchView {
     @Override
     public void updateListRoomSearch(List<Room> listRoomSearchResult) {
         listRoomSearch.clear();
-        Log.e("Room size search", listRoomSearchResult.size() + "");
         listRoomSearch.addAll(listRoomSearchResult);
         mAdapter.notifyDataSetChanged();
         if (listRoomSearchResult.size() == 0){
-            showMessage("Kết quả", "Không có kết quả phù hợp", SweetAlertDialog.SUCCESS_TYPE);
+            showMessage(getString(R.string.result), getString(R.string.no_result), SweetAlertDialog.SUCCESS_TYPE);
         }
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override

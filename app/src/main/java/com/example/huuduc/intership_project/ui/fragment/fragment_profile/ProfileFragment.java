@@ -96,7 +96,7 @@ public class ProfileFragment extends BaseFragment implements IProfileView {
 
                 break;
             case R.id.tvLogout:
-                showLoading("Đang thoát");
+                showLoading(getString(R.string.exiting));
                 DatabaseService.getInstance().signOut();
                 startActivity(new Intent(getContext(), LoginActivity.class));
                 hideLoading();
@@ -108,7 +108,6 @@ public class ProfileFragment extends BaseFragment implements IProfileView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -138,12 +137,10 @@ public class ProfileFragment extends BaseFragment implements IProfileView {
             }
 
             @Override
-            public void OnFailed(String error) {
-            }
+            public void OnFailed(String error) {}
 
             @Override
-            public void OnSuccess_RoomLike(List<String> listRoomLike) {
-            }
+            public void OnSuccess_RoomLike(List<String> listRoomLike) {}
         });
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -172,9 +169,7 @@ public class ProfileFragment extends BaseFragment implements IProfileView {
     }
 
     @Override
-    public void getAllLikedRoom(List<Room> listRoom) {
-
-    }
+    public void getAllLikedRoom(List<Room> listRoom) {}
 
     @Override
     public void updateNewInfo(String name, Boolean gender, String phone) {
@@ -187,7 +182,7 @@ public class ProfileFragment extends BaseFragment implements IProfileView {
             rbFemale.setChecked(true);
         }
         edtPhone.setText(phone);
-        showMessage("Thông báo", "Cập nhập thông tin thành công", SweetAlertDialog.SUCCESS_TYPE);
+        showMessage(getString(R.string.noti), getString(R.string.update_success), SweetAlertDialog.SUCCESS_TYPE);
     }
 
 }
