@@ -21,6 +21,8 @@ public class SearchResultPresenter implements ISearchResultPresenter {
         this.mView = mView;
     }
 
+    private final String TAG = getClass().getSimpleName();
+
     @Override
     public void loadSearchModelAndSearch(Intent intent) {
         Bundle bundle = intent.getExtras();
@@ -35,12 +37,16 @@ public class SearchResultPresenter implements ISearchResultPresenter {
                     }
 
                     @Override
-                    public void OnFailed(String error) {}
+                    public void OnFailed(String error) {
+                        Log.e(TAG, error);
+                    }
 
                     @Override
-                    public void OnSuccess_RoomLike(List<String> listRoomLike) {}
+                    public void OnSuccess_RoomLike(List<String> listRoomLike) {
+                        Log.e(TAG, String.valueOf(listRoomLike.size()));
+                    }
                 });
-            } else {
+            } else { //filter theo giá và địa chỉ
                 RoomHelper.filterRoomByPriceAndAddress(search.getPriceStart(), search.getPriceEnd(),
                         search.getDistrict(), search.getWard(), new RoomListListener() {
                     @Override
@@ -49,10 +55,11 @@ public class SearchResultPresenter implements ISearchResultPresenter {
                     }
                     @Override
                     public void OnFailed(String error) {
-                        Log.e("Errorm ", error);
+                        Log.e(TAG, error);
                     }
                     @Override
-                    public void OnSuccess_RoomLike(List<String> listRoomLike) {}
+                    public void OnSuccess_RoomLike(List<String> listRoomLike) {
+                        Log.e(TAG, String.valueOf(listRoomLike.size())); }
                 });
             }
 

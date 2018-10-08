@@ -45,8 +45,8 @@ tấc cả nhà trên đều nằm ở những con đường huyết mạch, dâ
     <string name="no_result">"Không có kết quả phù hợp"</string>
 
     <!--FilterActivity-->
-    <string name="priceStart">"VNĐ - "</string>
-    <string name="priceEnd">"VNĐ"</string>
+    <string name="currencyStart">"VNĐ - "</string>
+    <string name="currencyEnd">"VNĐ"</string>
 
     <!--ProfileFragment-->
     <string name="exiting">"Đang thoát"</string>

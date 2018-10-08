@@ -23,26 +23,6 @@ public class RoomHelper {
     public static DatabaseService mDatabase = DatabaseService.getInstance();
     public static DatabaseReference mRoomRef = mDatabase.createDatabase(Constant.ROOM_REFERENCE);
 
-    public static void getAllRoom(final RoomListListener roomListListener) {
-        mRoomRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                List<Room> rooms = new ArrayList<>();
-                for (DataSnapshot dsp : dataSnapshot.getChildren()) {
-                    Room room = dsp.getValue(Room.class);
-                    rooms.add(room); //add result into array list
-                }
-                roomListListener.OnSuccess(rooms);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                roomListListener.OnFailed(databaseError.getMessage());
-            }
-        });
-    }
-
     public static void getAllLikedRoomByUser(final RoomListListener roomListListener) {
         UserHelper.getAllRoomLiked(new RoomListListener() {
             @Override
@@ -69,7 +49,6 @@ public class RoomHelper {
                             if (room.getPublic())
                                 listLikedRoom.add(room);
                             if (finalI == listRoomLike.size() - 1) {
-                                Log.e("in If", listLikedRoom.size() + "");
                                 roomListListener.OnSuccess(listLikedRoom);
                             }
                         }
@@ -102,7 +81,6 @@ public class RoomHelper {
                             Room room = dataSnapshot.getValue(Room.class);
                             myRooms.add(room);
                             if (myRooms.size() == listRoomLike.size()) {
-                                Log.e("in If", myRooms.size() + "");
                                 roomListListener.OnSuccess(myRooms);
                             }
                         }
@@ -119,7 +97,7 @@ public class RoomHelper {
 
     public static void getAllBestSeenRoom(final RoomListListener roomListListener) {
 
-        mRoomRef.orderByChild("seen").addListenerForSingleValueEvent(new ValueEventListener() {
+        mRoomRef.orderByChild(Constant.ROOM_SEEN).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<Room> lisBestSeenRoom = new ArrayList<>();
@@ -144,7 +122,8 @@ public class RoomHelper {
 
     public static void getBestRatingRoom(final RoomListListener roomListListener) {
         final List<Room> listBestRatingRoom = new ArrayList<>();
-        mRoomRef.orderByChild("rating").startAt("3").addListenerForSingleValueEvent(new ValueEventListener() {
+        mRoomRef.orderByChild(Constant.ROOM_RATING).startAt(Constant.MIN_RATING_OF_BESTROOM)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listBestRatingRoom.clear();
@@ -166,7 +145,7 @@ public class RoomHelper {
     public static void filterRoomByPrice(int startPrice, int endPrice, RoomListListener roomListListener) {
 
         final List<Room> listRoomByPrice = new ArrayList<>();
-        mRoomRef.orderByChild("price").startAt((double) startPrice).endAt((double) endPrice).addValueEventListener(new ValueEventListener() {
+        mRoomRef.orderByChild(Constant.ROOM_PRICE).startAt((double) startPrice).endAt((double) endPrice).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listRoomByPrice.clear();
@@ -186,7 +165,7 @@ public class RoomHelper {
     public static void filterRoomByPriceAndAddress(int priceStart, int priceEnd, District district, Ward ward, RoomListListener roomListListener) {
         final List<Room> listRoomByPriceAndAddress = new ArrayList<>();
         // tim trong quan va gia
-        mRoomRef.orderByChild("price").startAt((double) priceStart).endAt((double) priceEnd).addValueEventListener(new ValueEventListener() {
+        mRoomRef.orderByChild(Constant.ROOM_PRICE).startAt((double) priceStart).endAt((double) priceEnd).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listRoomByPriceAndAddress.clear();
@@ -215,9 +194,14 @@ public class RoomHelper {
     }
 
     public static void plusRoomSeen (String roomId, int seen){
-        mRoomRef.child(roomId).child("seen").setValue(seen);
+        mRoomRef.child(roomId).child(Constant.ROOM_SEEN).setValue(seen);
     }
 
+    /**
+     * Description: Add new room to Room node
+     * @param room
+     * @param listener
+     */
     public static void pushNewRoom(Room room, RoomListListener listener){
         if (TextUtils.isEmpty(room.getId())){
             String key = mRoomRef.push().getKey();

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -60,7 +59,7 @@ public class FillterActivity extends BaseActivity implements IFillterView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fillter);
-        init();
+        initialize();
         mPresenter.loadDistrict();
     }
 
@@ -76,17 +75,21 @@ public class FillterActivity extends BaseActivity implements IFillterView {
         finish();
     }
 
-    private void init() {
+    private void initialize() {
         setValueForSlider();
 
+        // setup toolbar
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        // Khởi tạo Presenter
         mPresenter = new FillterPresenter(this, this);
 
+        // Khởi tạo list District và Ward
         mDistricts = new ArrayList<>();
         mWards = new ArrayList<>();
 
+        // Khởi tạo 2 adapter tương ứng
         mDistrictAdapter = new FillterAdapter<>(this, mDistricts, position -> {
             district = mDistricts.get(position);
             mPresenter.loadWards(mDistricts.get(position));
@@ -103,12 +106,15 @@ public class FillterActivity extends BaseActivity implements IFillterView {
         rvWard.setAdapter(mWardAdapter);
     }
 
+    /**
+     * Description: set value, adjust value for slider
+     */
     private void setValueForSlider() {
         int minSlider = 1;
         int maxSlider = 19;
         int currentSlider = 9;
-        // set init value for slider price
 
+        // set initialize value for slider price
         sliderPrice.getThumb(0).setValue(minSlider);
         sliderPrice.getThumb(1).setValue(currentSlider);
         // set min max value for slider price
@@ -117,46 +123,51 @@ public class FillterActivity extends BaseActivity implements IFillterView {
 
         DecimalFormat formatter = new DecimalFormat("###,###,###");
 
-        float startPrice = (float) (((sliderPrice.getThumb(0).getValue()) / 2 + 0.5) * Constant.PRICE_START);
-        float endPrice = (float) (((sliderPrice.getThumb(1).getValue()) / 2 + 0.5) * Constant.PRICE_START);
-
-        String startPriceText = String.valueOf(formatter.format(startPrice)) + getString(R.string.priceStart);
+        // Set giá trị mặc định ban đầu cho 2 đầu slider
+        String startPriceText = String.valueOf(formatter.format(Constant.PRICE_START)) + getString(R.string.currencyStart);
         tvStartPrice.setText(startPriceText);
 
-        String endPriceText = String.valueOf(formatter.format(endPrice)) + getString(R.string.priceEnd);
+        String endPriceText = String.valueOf(formatter.format(Constant.PRICE_END)) + getString(R.string.currencyEnd);
         tvEndPrice.setText(endPriceText);
 
+        //Set lại giá trị cho Slider mỗi khi user thay đổi trên slider
         sliderPrice.setOnThumbValueChangeListener((multiSlider, thumb, thumbIndex, value) -> {
+            //Đầu bên trái slider
             if (thumbIndex == 0) {
-                priceStart = (int) (((float) (value) / 2 + 0.5) * Constant.PRICE_START);
-                Log.e("start", priceStart + "");
                 String startString = String.valueOf(
-                        formatter.format(((float) (value) / 2 + 0.5) * Constant.PRICE_START)) + getString(R.string.priceStart);
+                        formatter.format(((float) (value) / 2 + 0.5) * Constant.PRICE_START))
+                        + getString(R.string.currencyStart);
                 tvStartPrice.setText(startString);
-            } else {
-                priceEnd = (int) (((float) (value) / 2 + 0.5) * Constant.PRICE_START);
-                Log.e("end", priceEnd + "");
+            } else { //Đầu bên phải slider
                 String endString = String.valueOf(
-                        formatter.format(((float) (value) / 2 + 0.5) * Constant.PRICE_START)) + getString(R.string.priceEnd);
+                        formatter.format(((float) (value) / 2 + 0.5) * Constant.PRICE_START))
+                        + getString(R.string.currencyEnd);
                 tvEndPrice.setText(endString);
             }
         });
     }
 
+    /**
+     * Mô tả: Lấy các điều kiện Search để chuyển qua màn hình SearchResultActivity
+     *
+     * @param view
+     */
     @OnClick(R.id.btnFilter)
     void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btnFilter:
-                Search search = new Search(district, ward, priceStart, priceEnd);
+        if (view.getId() == R.id.btnFilter) {
+            Search search = new Search(district, ward, priceStart, priceEnd);
 
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(Constant.SEARCH_OBJ, search);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(Constant.SEARCH_OBJ, search);
 
-                this.goNextScreen(SearchResultActivity.class, bundle);
-                break;
+            this.goNextScreen(SearchResultActivity.class, bundle);
         }
     }
 
+    /**
+     * Mô tả: Callback sau khi đã load được List Dictrict về => hiển thị lên RecycleView
+     * @param objects
+     */
     @Override
     public void updateRecycleViewDistrict(List<District> objects) {
         mDistricts.clear();
@@ -164,6 +175,10 @@ public class FillterActivity extends BaseActivity implements IFillterView {
         mDistrictAdapter.notifyDataSetChanged();
     }
 
+    /**
+     * Mô tả: Callback sau khi đã load được List Ward về => hiển thị lên RecycleView
+     * @param wards
+     */
     @Override
     public void updateRecycleViewWard(List<Ward> wards) {
         mWards.clear();
